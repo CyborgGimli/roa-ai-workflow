@@ -1,0 +1,694 @@
+{
+  "items": [
+    {
+      "id": "io.cyborgcode.roa.validator.core.Assertion",
+      "summary": "Single validation rule describing what to assert (target), how to assert it (type), and what value is expected. Assertions can be executed as soft (collected until quest.complete()) or hard (fail immediately) depending on the soft flag.",
+      "usages": [
+        {
+          "code": "Assertion assertion = Assertion.builder()\n    .target(UiTablesAssertionTarget.ROW_VALUES)\n    .type(TableAssertionTypes.CONTAINS_ROW)\n    .expected(\"TELECOM\")\n    .soft(true)\n    .build();\n\nquest.use(RING_OF_UI)\n    .table().validate(Tables.ALL_TRANSACTIONS, assertion)\n    .drop().complete();\n",
+          "description": "Build a table-focused assertion by combining a UI table AssertionTarget (what part of the table is validated) with a table AssertionType (how it’s validated) and an expected value. The table fluent validation executes the assertion and reports it through ROA’s assertion handling.",
+          "level": "CORE",
+          "contextHint": "UI-side: Assertion is commonly used by table/validator flows (targets like UiTablesAssertionTarget and types like TableAssertionTypes). soft=true collects failures until quest.complete(); soft=false is typically treated as immediate failure by the validation layer."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuestSequential",
+      "summary": "Base test class for sequential execution (PER_CLASS). Extend it when UI test methods must run one-by-one and/or share state across methods (e.g., reuse a logged-in session, keep a wizard flow alive, or avoid expensive re-setup per test).",
+      "usages": [
+        {
+          "code": "@UI\nclass AdvancedFeaturesTest extends BaseQuestSequential {\n\n  @Override\n  protected void beforeAll(Services services) {\n    // one-time setup for the whole class (e.g., seed data, prepare environment)\n  }\n\n  @Test\n  void step1(Quest quest) {\n    quest.use(RING_OF_UI)\n        .browser().navigate(getUiConfig().baseUrl())\n        .complete();\n  }\n\n  @Test\n  void step2(Quest quest) {\n    quest.use(RING_OF_UI)\n        .browser().navigate(getUiConfig().baseUrl())\n        .complete();\n  }\n\n  @Override\n  protected void afterAll(Services services) {\n    // one-time cleanup for the whole class\n  }\n}\n",
+          "description": "Extend BaseQuestSequential to execute tests sequentially within one class instance (PER_CLASS lifecycle).",
+          "level": "CORE",
+          "contextHint": "Use when UI test methods must not run in parallel or when you intentionally share class state between tests. Prefer BaseQuest for normal parallel-friendly tests."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuestSequential.beforeAll(io.cyborgcode.roa.framework.base.Services)",
+      "summary": "Optional hook for one-time setup executed once before any @Test methods in a BaseQuestSequential class.",
+      "usages": [
+        {
+          "code": "@Override\nprotected void beforeAll(Services services) {\n  // Example: warm up a UI environment, seed records, or prepare shared fixtures\n  // services.<bean>() ...\n}\n",
+          "description": "Override to perform one-time setup for the whole test class.",
+          "level": "CORE",
+          "contextHint": "Only applicable in classes extending BaseQuestSequential. Called automatically once before the first test method runs. Use Services to access Spring-managed beans if your setup needs them."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuestSequential.afterAll(io.cyborgcode.roa.framework.base.Services)",
+      "summary": "Optional hook for one-time cleanup executed once after all @Test methods in a BaseQuestSequential class have finished.",
+      "usages": [
+        {
+          "code": "@Override\nprotected void afterAll(Services services) {\n  // Example: remove seeded data, clear shared state, close long-lived sessions\n  // services.<bean>() ...\n}\n",
+          "description": "Override to perform one-time cleanup for the whole test class.",
+          "level": "CORE",
+          "contextHint": "Only applicable in classes extending BaseQuestSequential. Called automatically once after the last test method finishes. Keep cleanup idempotent so reruns remain reliable."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.retry.RetryCondition",
+      "summary": "Retry condition abstraction: a function that produces a value and a predicate that decides success. Typically created using RetryConditionImpl and passed to FluentService.retryUntil(...).",
+      "usages": [
+        {
+          "code": "RetryCondition<Boolean> condition = new RetryConditionImpl<>(\n    driver -> driver.find(By.cssSelector(\".dashboard\")).isDisplayed(),\n    result -> result\n);\n",
+          "description": "Define a RetryCondition by pairing a value-producing function with a success predicate (most commonly via RetryConditionImpl).",
+          "level": "CORE",
+          "contextHint": "The retry mechanism repeatedly calls condition.function() with the provided service object (e.g., SmartWebDriver) and checks condition.condition() until it passes or times out."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.Storage",
+      "summary": "Per-Quest (per-test) in-memory storage. Values are stored under enum keys, optionally grouped in sub-storages (namespaces like UI/PRE_ARGUMENTS/STATIC_DATA). Most tests should NOT access Storage directly—prefer BaseQuest.retrieve(...) and extractor helpers (e.g., DataExtractorsTest/DataExtractorsUi). Direct Storage access is mainly for project-side utilities (data creators, preconditions, hooks, custom rings).",
+      "usages": [
+        {
+          "code": "SuperQuest q = QuestHolder.get();\n\n// Project-side: store a precondition argument so the test flow can retrieve it later\nq.getStorage().sub(PRE_ARGUMENTS).put(\"PURCHASE_CURRENCY\", purchaseModel);\n",
+          "description": "Project-side: store values explicitly (commonly inside journeys/preconditions or helper services). This enables later retrieval from the quest flow without passing objects through every method call.",
+          "level": "CORE",
+          "contextHint": "Use in project utilities (DataCreator/Preconditions/hooks/custom rings). In tests, prefer BaseQuest.retrieve(...) instead of touching Storage directly."
+        },
+        {
+          "code": "SuperQuest q = QuestHolder.get();\n\n// Project-side: read the latest stored value for a key from a namespace sub-storage\nPurchaseForeignCurrency latest = q.getStorage()\n    .sub(PRE_ARGUMENTS)\n    .getByClass(\"PURCHASE_CURRENCY\", PurchaseForeignCurrency.class);\n",
+          "description": "Project-side: read the latest stored value for a key from a namespace sub-storage in a typed way.",
+          "level": "CORE",
+          "contextHint": "Storage.getByClass(key, Class) (or equivalent typed getters) returns the latest value stored under that key. If nothing exists, it returns null."
+        },
+        {
+          "code": "SuperQuest q = QuestHolder.get();\n\n// Read older entries when the same key was stored multiple times (1 = latest, 2 = previous, ...)\nString latestTotal = q.getStorage().sub(StorageKeysUi.UI).getByIndex(\"CART_TOTAL\", 1, String.class);\nString previousTotal = q.getStorage().sub(StorageKeysUi.UI).getByIndex(\"CART_TOTAL\", 2, String.class);\n",
+          "description": "Read older entries when the same key was stored multiple times (useful for comparisons like before/after values in a single test flow).",
+          "level": "ADVANCED",
+          "contextHint": "Index is 1-based from the end (1 = most recent). In tests, prefer retrieve(extractor, index, type) when an extractor helper exists (e.g., DataExtractorsUi.responseBodyExtraction(..., index))."
+        },
+        {
+          "code": "SuperQuest q = QuestHolder.get();\nMap<Object, Object> hooks = q.getStorage().get(StorageKeysTest.HOOKS, Map.class);\nObject value = hooks.get(UiHookKeys.SESSION_ID);\n",
+          "description": "Access hook-scoped data stored under the HOOKS map (used by hookData(...) and Storage.getHookData(...)).",
+          "level": "ADVANCED",
+          "contextHint": "If you’re in a test class extending BaseQuest, prefer hookData(UiHookKeys.SESSION_ID, Type.class) instead of accessing the HOOKS map directly."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.Craft",
+      "summary": "Parameter annotation for injecting test-data models into @Test method arguments by resolving a project-defined model key (e.g., \"PURCHASE_CURRENCY\"). If the parameter type is a concrete model, ROA injects it eagerly; if the parameter type is Late<T>, ROA injects a lazy creator and you call create() when you’re ready.",
+      "usages": [
+        {
+          "code": "@Test\nvoid craft_injectsModelDataIntoSteps(\n    Quest quest,\n    // Eager craft: ROA creates the model before the test body runs\n    @Craft(model = \"PURCHASE_CURRENCY\") PurchaseForeignCurrency purchase\n) {\n  quest\n      .use(RING_OF_PURCHASE_CURRENCY)\n      .purchaseCurrency(purchase)\n      .validatePurchase()\n      .complete();\n}\n",
+          "description": "Eager injection: the framework resolves the model key and creates the object up-front, then injects it directly as the parameter.",
+          "level": "CORE",
+          "contextHint": "Use on @Test method parameters only. model must point to a project DataForge key (e.g., \"PURCHASE_CURRENCY\"). Prefer this when the test data can be created before the flow starts."
+        },
+        {
+          "code": "@Test\nvoid craft_supportsLateCreation_whenDataIsNeededLater(\n    Quest quest,\n    // Lazy craft: ROA injects Late<T> and you decide when to materialize\n    @Craft(model = \"PURCHASE_CURRENCY\") Late<PurchaseForeignCurrency> latePurchase\n) {\n  quest\n      .use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .insertion().insertData(latePurchase.create())\n      .complete();\n}\n",
+          "description": "Lazy injection: inject Late<T> and call create() at the point in the flow where you need the object (useful when the model depends on runtime state or you want to delay creation until after navigation/login/preconditions).",
+          "level": "CORE",
+          "contextHint": "Use when crafted data should be created later in the scenario (e.g., after the UI reaches a specific state). The model key is still the same (e.g., \"PURCHASE_CURRENCY\"); the framework injects Late<T> and you call create() when appropriate."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.PreQuest",
+      "summary": "Optional container annotation for grouping multiple @Journey annotations on a single @Test method. Prefer stacking multiple @Journey annotations directly unless you specifically want the container style.",
+      "usages": [
+        {
+          "code": "@Test\n@PreQuest({\n    @Journey(value = \"USER_LOGIN_PRECONDITION\", order = 0),\n    @Journey(\n        value = \"PURCHASE_CURRENCY_PRECONDITION\",\n        journeyData = { @JourneyData(\"PURCHASE_CURRENCY\") },\n        order = 1\n    )\n})\nvoid test_withPreQuestContainer(Quest quest) {\n  quest\n      .use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Container style: group multiple journeys into a single annotation. Ordering is still controlled by Journey.order(). In real projects, Journey.value is typically written as a constant from an enum implementing PreQuestJourney (e.g., Preconditions implements PreQuestJourney<Preconditions>), and JourneyData values are typically written as constants from an enum implementing DataForge (e.g., DataCreator implements DataForge<DataCreator>).",
+          "level": "ADVANCED",
+          "contextHint": "Optional. In modern usage you can simply stack multiple @Journey annotations directly on the test method instead of using @PreQuest. If you use @PreQuest, keep explicit order values on each Journey so execution is deterministic."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.DataExtractor",
+      "summary": "Framework contract for extracting a typed value from ROA storage. A DataExtractor encapsulates where to read from (namespace/key) and how to transform the stored raw object into the desired type, so tests can call retrieve(extractor, Type.class) without knowing storage internals.",
+      "usages": [
+        {
+          "code": "public class CartTotalExtractor implements DataExtractor {\n\n  private final String key;\n\n  public CartTotalExtractor(String key) {\n    this.key = key;\n  }\n\n  @Override\n  public Object extractFrom(Storage storage) {\n    // Example: read a raw value from storage and normalize it\n    String raw = storage.get(key, String.class);\n    return raw.replace(\"$\", \"\").trim();\n  }\n}\n\n// Usage in a test flow\nString total = retrieve(new CartTotalExtractor(\"CART_TOTAL\"), String.class);\n",
+          "description": "Implement DataExtractor to centralize extraction logic (read + transform) for values stored during UI flows (e.g., intercepted payload values, computed UI totals, static test data entries). This keeps tests clean and avoids repeating storage/normalization code.",
+          "level": "ADVANCED",
+          "contextHint": "Prefer reusing existing extractor utilities/registries when available. For UI-focused extractors, use DataExtractorUI helpers (if provided by your project/framework) instead of creating ad-hoc extractors throughout tests."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.chain.FluentService",
+      "summary": "Base class for project-defined Rings (custom fluent services). Extend it to build reusable flows and to call other rings via quest.use(...).",
+      "usages": [
+        {
+          "code": "@Ring(\"UI\")\npublic class AppUiService extends UiServiceFluent<AppUiService> {\n\n  public AppUiService(SmartWebDriver driver, SuperQuest quest) {\n    super(driver);\n    this.quest = quest;\n    postQuestSetupInitialization();\n  }\n\n  public AppUiService openHome() {\n    quest.use(RING_OF_UI)\n        .browser().navigate(getUiConfig().baseUrl())\n        .drop();\n    return this;\n  }\n}\n",
+          "description": "Create a project-side ring by extending FluentService (directly or via a project facade like UiServiceFluent). Ring methods should return the ring type to keep fluent chaining, and can orchestrate other rings via quest.use(...).",
+          "level": "CORE",
+          "contextHint": "Project-side change. Rings are Spring beans annotated with @Ring(...), and are activated from tests via quest.use(RING_OF_UI) (or your project ring constant)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.chain.FluentService.drop()",
+      "summary": "Return from the current Ring back to Quest so you can switch rings or finish the flow.",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_UI)\n     .input().insert(LoginFields.USERNAME, \"demo\")\n     .drop()\n     .use(RING_OF_UI).button().click(LoginButtons.SIGN_IN)\n     .drop()\n     .complete();\n",
+          "description": "Switch rings (or ring sub-services) mid-flow: exit the current fluent context and return to the Quest chain.",
+          "level": "CORE",
+          "contextHint": "Use when one fluent segment finishes and the next segment continues the flow. Always finish the overall flow with complete() on the quest chain."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.chain.FluentService.postQuestSetupInitialization()",
+      "summary": "Ring hook invoked after the framework attaches the active SuperQuest to the ring. Override it for ring-specific initialization that depends on quest being available (storage namespaces, defaults, etc.).",
+      "usages": [
+        {
+          "code": "public class AppUiService extends UiServiceFluent<AppUiService> {\n\n  public AppUiService(SmartWebDriver driver, SuperQuest quest) {\n    super(driver);\n    this.quest = quest;\n    postQuestSetupInitialization();\n  }\n\n}\n",
+          "description": "Override when the ring needs one-time initialization that depends on quest being available (e.g., creating a sub-storage namespace or setting defaults).",
+          "level": "ADVANCED",
+          "contextHint": "Project-side ring authoring. Do not call this manually in tests; it’s part of ring initialization/wiring. If your project constructs a facade manually (like AppUiService), call postQuestSetupInitialization() after assigning quest, as shown."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.chain.FluentService.retryUntil(io.cyborgcode.roa.framework.retry.RetryCondition, java.time.Duration, java.time.Duration, java.lang.Object)",
+      "summary": "Protected retry primitive used by rings. Wrap it in your ring when you want polling behavior (e.g., wait for a UI condition) without putting sleeps in tests.",
+      "usages": [
+        {
+          "code": "public class CustomService extends FluentService {\n\n  public CustomService waitUntilDashboardVisible(RetryCondition<Boolean> condition) {\n    retryUntil(condition, Duration.ofSeconds(10), Duration.ofMillis(200), driver);\n    return this;\n  }\n}\n",
+          "description": "Expose retry behavior from a custom ring by wrapping the protected retryUntil(...) method and passing the correct service object into the condition.",
+          "level": "ADVANCED",
+          "contextHint": "Project-side ring authoring. The 'service' parameter must match what condition.function() expects (for UI flows this is often SmartWebDriver or a component/service instance). Use this to stabilize polling-based waits inside rings rather than in tests."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.Regression",
+      "summary": "Marks a test method as part of the Regression suite (wraps JUnit @Tag(\"Regression\")).",
+      "usages": [
+        {
+          "code": "@Test\n@Regression\nvoid shouldValidatePurchaseCurrencyFlow(Quest quest) {\n  quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Tag a single UI test method as Regression (broader coverage checks that can run longer than smoke).",
+          "level": "CORE",
+          "contextHint": "Use on @Test methods only. Prefer Regression for broader coverage that is valuable in CI/nightly runs."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.JourneyData",
+      "summary": "Used inside @Journey(journeyData=...) to declare which test data model(s) should be prepared and passed as arguments to the journey before the test body runs. The value is typically written as a constant from a project enum implementing DataForge (e.g., DataCreator implements DataForge<DataCreator>).",
+      "usages": [
+        {
+          "code": "@Test\n@Journey(\n    value = \"PURCHASE_CURRENCY_PRECONDITION\",\n    journeyData = { @JourneyData(\"PURCHASE_CURRENCY\") },\n    order = 0\n)\nvoid journey_withData(Quest quest) {\n  quest\n      .use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Default (eager) journey data: the framework resolves the model referenced by JourneyData.value and passes the created object(s) into the journey precondition as arguments. In real projects, JourneyData.value is commonly written as a constant from an enum that implements DataForge (e.g., DataCreator implements DataForge<DataCreator>).",
+          "level": "CORE",
+          "contextHint": "Use only inside @Journey(journeyData = {...}) on a @Test method. Include journeyData only when the journey requires input models; omit it when the journey takes no inputs. The value must reference a project-defined model key (string), typically coming from your DataForge enum."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.parameters.Late",
+      "summary": "Deferred value wrapper used to delay creating a crafted test-data object until you explicitly call create(). Commonly used as a @Test parameter together with @Craft(model = \"...\") when the model should be materialized on demand.",
+      "usages": [
+        {
+          "code": "@Test\nvoid late_allowsOnDemandCraft(\n    Quest quest,\n    @Craft(model = \"PURCHASE_CURRENCY\") Late<PurchaseForeignCurrency> latePurchase\n) {\n  quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .insertion().insertData(latePurchase.create())\n      .complete();\n}\n",
+          "description": "Use Late<T> when you want the crafted model to be created on demand. Call create() at the moment you need the real object (useful when creation should happen after navigation/login/preconditions).",
+          "level": "CORE",
+          "contextHint": "Typically used as a @Test parameter together with @Craft(model = \"...\"). create() materializes the actual object; until then, no model is created."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.parameters.PreQuestJourney",
+      "summary": "Project-side contract for reusable preconditions (journeys) executed before the test body. Implement it as an enum (e.g., Preconditions) where each constant maps to a BiConsumer<SuperQuest, Object[]> function. Tests trigger these journeys via @Journey(value = \"<KEY>\", ...) and optionally pass inputs via @JourneyData(\"<MODEL_KEY>\").",
+      "usages": [
+        {
+          "code": "public enum Preconditions implements PreQuestJourney<Preconditions> {\n\n  PURCHASE_CURRENCY_PRECONDITION((quest, objects) -> quest\n      .use(RING_OF_PURCHASE_CURRENCY)\n      .purchaseCurrency((PurchaseForeignCurrency) objects[0])\n  );\n\n  private final BiConsumer<SuperQuest, Object[]> function;\n\n  Preconditions(final BiConsumer<SuperQuest, Object[]> function) {\n    this.function = function;\n  }\n\n  @Override\n  public BiConsumer<SuperQuest, Object[]> journey() {\n    return function;\n  }\n\n  @Override\n  public Preconditions enumImpl() {\n    return this;\n  }\n}\n\n@Test\n@Journey(\n    value = \"PURCHASE_CURRENCY_PRECONDITION\",\n    journeyData = { @JourneyData(\"PURCHASE_CURRENCY\") }\n)\nvoid usesPreQuestJourney(Quest quest) {\n  quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Define a project enum implementing PreQuestJourney to register reusable setup logic. The framework resolves @Journey.value to a Preconditions entry, executes its journey() function before the test body, and passes any @JourneyData-resolved models via the Object[] arguments.",
+          "level": "CORE",
+          "contextHint": "Project-side: keep each journey deterministic and safe to run as setup; use the Object[] args only when the journey needs crafted inputs. Test-side: reference the journey by its string key in @Journey(value = \"...\") and include @JourneyData only when the journey expects input models."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuest",
+      "summary": "Base test class for ROA-style UI tests. Extend it for the default (parallel-friendly) execution model and to use built-in storage retrieval helpers (retrieve / hookData) that read values written by rings, interceptors, hooks, and test-data providers.",
+      "usages": [
+        {
+          "code": "@UI\n@DisplayName(\"Progressive UI Features: Basic to Advanced\")\nclass BasicToAdvancedFeaturesTest extends BaseQuest {\n\n  @Test\n  void example(Quest quest) {\n    quest.use(RING_OF_UI)\n        .browser().navigate(getUiConfig().baseUrl())\n        .complete();\n  }\n}\n",
+          "description": "Extend BaseQuest for standard test classes. Tests inject Quest as a method parameter and use quest.use(...) to activate rings. BaseQuest also provides convenience retrieval helpers for values stored during the quest flow.",
+          "level": "CORE",
+          "contextHint": "Use BaseQuest for normal test classes. Use BaseQuestSequential only when tests must run sequentially and/or share state across methods."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuest.retrieve(java.lang.Enum, java.lang.Class)",
+      "summary": "Retrieve a typed object from the default quest storage namespace using a single enum key.",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_UI)\n    .validate(() -> {\n      // Example: a previous step stored data under this enum key in the default storage\n      List<?> locations = retrieve(SelectFields.LOCATION_DDL, List.class);\n      Assertions.assertFalse(locations.isEmpty());\n    })\n    .complete();\n",
+          "description": "Use when a ring, interceptor, or framework helper stores a value under a single enum key in the default storage map and you want to read it back in a typed way inside the test flow.",
+          "level": "CORE",
+          "contextHint": "Use for simple “one-key” retrieval from the default storage namespace. Prefer DataExtractor-based retrieval when you’re reading from structured storage patterns (static test data, intercepted payload extraction, etc.)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuest.retrieve(io.cyborgcode.roa.framework.storage.DataExtractor, java.lang.Class)",
+      "summary": "Retrieve a typed value using a DataExtractor (recommended for framework-managed storage patterns like static test data or intercepted/extracted payloads).",
+      "usages": [
+        {
+          "code": "@Test\n@StaticTestData(UiStaticData.class)\nvoid usesStaticUiData(Quest quest) {\n  String username = retrieve(staticTestData(UiStaticData.USERNAME), String.class);\n  String password = retrieve(staticTestData(UiStaticData.PASSWORD), String.class);\n\n  quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .input().insert(LoginFields.USERNAME, username)\n      .input().insert(LoginFields.PASSWORD, password)\n      .button().click(LoginButtons.SIGN_IN)\n      .complete();\n}\n",
+          "description": "Use a DataExtractor to read a value from a structured storage source (e.g., static test data loaded by @StaticTestData). The extractor encapsulates where/how the value is stored so your test stays clean and consistent.",
+          "level": "CORE",
+          "contextHint": "Common pairings: @StaticTestData(...) + staticTestData(...). DataExtractor-based retrieval is also a good fit for interceptor/extraction utilities that write derived values to storage."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuest.hookData(java.lang.Object, java.lang.Class)",
+      "summary": "Retrieve a typed value produced by class-level hooks (e.g., DB/API/UI hooks) from the hook-scoped storage map using a key object (often an enum).",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_UI)\n    .validate(() -> {\n      // Example: a BEFORE hook stored an auth/session artifact under this key\n      String sessionId = hookData(UiHookKeys.SESSION_ID, String.class);\n      Assertions.assertNotNull(sessionId);\n    })\n    .complete();\n",
+          "description": "Use hookData(...) to read values written by hook flows (BEFORE/AFTER class hooks) into the dedicated hook-scoped storage map, so you can reuse hook-prepared artifacts during your test.",
+          "level": "CORE",
+          "contextHint": "Hook-side requirement: the hook must store a value using the same key object (commonly an enum key) via its hook storage map. Prefer hookData(...) for hook outputs instead of retrieve(...), since hooks use a dedicated hook-scoped storage."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuest.retrieve(io.cyborgcode.roa.framework.storage.DataExtractor, int, java.lang.Class)",
+      "summary": "Retrieve an indexed value using a DataExtractor when multiple values were stored under the same extractor key (index is 1-based from the end: 1 = latest, 2 = previous).",
+      "usages": [
+        {
+          "code": "// After running the same intercepted/extracted flow multiple times, you can compare latest vs previous\nList<String> latest = retrieve(\n    DataExtractorFunctions.responseBodyExtraction(\n        RequestsInterceptor.INTERCEPT_REQUEST_AUTH.getEndpointSubString(),\n        \"$[0].changes[?(@.key=='totalPrice')].value\",\n        \"for(;;);\"),\n    1,\n    List.class);\n\nList<String> previous = retrieve(\n    DataExtractorFunctions.responseBodyExtraction(\n        RequestsInterceptor.INTERCEPT_REQUEST_AUTH.getEndpointSubString(),\n        \"$[0].changes[?(@.key=='totalPrice')].value\",\n        \"for(;;);\"),\n    2,\n    List.class);\n",
+          "description": "Use indexed retrieval when the same extractor target is stored more than once in a single test flow (e.g., repeated interceptions or repeated extraction points). This is useful for comparisons like “value changed after edit.”",
+          "level": "CORE",
+          "contextHint": "Indexing is 1-based from the end: 1 = latest stored value, 2 = previous stored value. Requires that the extractor target was stored at least as many times as the index you request."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.BaseQuest.retrieve(java.lang.Enum, java.lang.Enum, java.lang.Class)",
+      "summary": "Retrieve a typed object from a sub-storage namespace using a namespace key (subKey) and an entry key.",
+      "usages": [
+        {
+          "code": "Order orderFromPrecondition = retrieve(PRE_ARGUMENTS, DataCreator.ORDER, Order.class);\n\nquest.use(RING_OF_CUSTOM)\n     .validateOrder(orderFromPrecondition)\n     .complete();\n",
+          "description": "Use when setup/preconditions or framework flows store values into a dedicated namespace (sub-storage) and you need to read them back by (namespace, entryKey). A common example is precondition arguments stored under PRE_ARGUMENTS keyed by the DataForge enum constant.",
+          "level": "CORE",
+          "contextHint": "Use after the producing flow has executed (e.g., a @Journey precondition that stores its input/output under PRE_ARGUMENTS). This keeps data sharing explicit without passing objects manually through every call."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.parameters.DataForge",
+      "summary": "Project-side contract for reusable test-data models used by @Craft and @JourneyData. Implement it as an enum (e.g., DataCreator) where each constant provides a Late creator for a specific model, and annotations reference the model by its string key (e.g., \"PURCHASE_CURRENCY\").",
+      "usages": [
+        {
+          "code": "public enum DataCreator implements DataForge<DataCreator> {\n\n  PURCHASE_CURRENCY(() -> PurchaseForeignCurrency.builder()\n      .currency(\"Mexico (peso)\")\n      .amount(\"100\")\n      .usDollar(true)\n      .build());\n\n  private final Late<Object> createDataFunction;\n\n  DataCreator(final Late<Object> createDataFunction) {\n    this.createDataFunction = createDataFunction;\n  }\n\n  @Override\n  public Late<Object> dataCreator() {\n    return createDataFunction;\n  }\n\n  @Override\n  public DataCreator enumImpl() {\n    return this;\n  }\n}\n\n@Test\nvoid usesCraftWithDataForgeModel(\n    Quest quest,\n    @Craft(model = \"PURCHASE_CURRENCY\") PurchaseForeignCurrency purchase\n) {\n  quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .insertion().insertData(purchase)\n      .complete();\n}\n",
+          "description": "Define a DataForge enum (DataCreator) to register a reusable model factory, then use @Craft(model = \"...\") to inject a ready instance as a test parameter. The framework resolves the model key to the matching DataForge entry and creates the object before the test body runs.",
+          "level": "CORE",
+          "contextHint": "Project-side: keep DataForge entries focused and reusable (builders/factories), returning Late so the framework can support eager or deferred creation patterns. Test-side: use @Craft(model = \"PURCHASE_CURRENCY\") to inject the model without hardcoding setup in the test body."
+        },
+        {
+          "code": "public enum DataCreator implements DataForge<DataCreator> {\n\n  PURCHASE_CURRENCY(() -> PurchaseForeignCurrency.builder()\n      .currency(\"Mexico (peso)\")\n      .amount(\"100\")\n      .usDollar(true)\n      .build());\n\n  private final Late<Object> createDataFunction;\n\n  DataCreator(final Late<Object> createDataFunction) {\n    this.createDataFunction = createDataFunction;\n  }\n\n  @Override\n  public Late<Object> dataCreator() {\n    return createDataFunction;\n  }\n\n  @Override\n  public DataCreator enumImpl() {\n    return this;\n  }\n}\n\n@Test\n@Journey(\n    value = \"PURCHASE_CURRENCY_PRECONDITION\",\n    journeyData = { @JourneyData(\"PURCHASE_CURRENCY\") }\n)\nvoid usesJourneyDataWithDataForgeModel(Quest quest) {\n  quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Use the same DataForge model key in @JourneyData when a precondition needs input models before the test body runs. The journey implementation receives the resolved object(s) as its arguments and can store outputs for later retrieval.",
+          "level": "CORE",
+          "contextHint": "Project-side: DataCreator (DataForge) remains the single registry for reusable models. Test-side: reference the same string key in @JourneyData that you would use in @Craft so preconditions can receive the crafted input models."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.retry.RetryConditionImpl",
+      "summary": "Concrete RetryCondition implementation. Create it by providing a function (produces value) and a predicate (success condition). Used with FluentService.retryUntil(...) via a project ring wrapper method.",
+      "usages": [
+        {
+          "code": "RetryCondition<Boolean> condition = new RetryConditionImpl<>(\n    driver -> driver.find(By.cssSelector(\".dashboard\")) != null,\n    result -> result\n);\n",
+          "description": "Create a simple retry condition that succeeds when the condition becomes true (e.g., an element is present/visible).",
+          "level": "CORE",
+          "contextHint": "Use as input to a ring method that wraps FluentService.retryUntil(condition, maxWait, retryInterval, service). The function is called repeatedly until the predicate returns true or timeout occurs."
+        },
+        {
+          "code": "RetryCondition<Boolean> condition = new RetryConditionImpl<>(\n    driver -> driver.find(By.cssSelector(\".dashboard\")).isDisplayed(),\n    result -> result\n);\n\nquest.use(RING_OF_UI)\n    .browser().navigate(getUiConfig().baseUrl())\n    .retryUntil(condition, Duration.ofSeconds(10), Duration.ofSeconds(1))\n    .drop()\n    .use(RING_OF_UI)\n    .button().click(DashboardButtons.REFRESH)\n    .drop()\n    .complete();\n",
+          "description": "Use the created RetryConditionImpl via a ring wrapper that calls FluentService.retryUntil(...), then continue the fluent chain after it succeeds.",
+          "level": "CORE",
+          "contextHint": "retryUntil(...) runs before the next chain steps. Keep the condition focused; after it passes, proceed with normal UI actions/validations. The wrapper method should pass the correct service object (e.g., SmartWebDriver) into the condition’s function."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.Quest",
+      "summary": "Core ROA quest object used in tests. Orchestrates ring activation (quest.use(...)), shared storage, and soft assertions for a single test run.",
+      "usages": [
+        {
+          "code": "@Test\nvoid uiFlow(Quest quest) {\n  quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Quest is injected into @Test methods and acts as the entry point for activating rings and running fluent test flows.",
+          "level": "CORE",
+          "contextHint": "Prefer using the injected Quest parameter in tests. Quest owns the lifecycle of the thread-local SuperQuest context and soft-assert flushing via complete()."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.Quest.use(java.lang.Class)",
+      "summary": "Activate a ring (fluent service) for the current test and continue chaining UI/custom actions.",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_UI)",
+          "description": "Activate the UI ring for the current quest.",
+          "level": "CORE",
+          "contextHint": "Use at the start of a chain or after drop() when switching rings. Prefer using project ring constants from Rings (e.g., Rings.RING_OF_UI) instead of raw UiServiceFluent.class."
+        },
+        {
+          "code": "quest.use(RING_OF_CUSTOM)\n     .prepareSomething()\n     .drop()\n     .use(RING_OF_UI)\n     .browser().navigate(getUiConfig().baseUrl())",
+          "description": "Switch rings mid-flow: use a custom ring for reusable logic, then drop back to Quest and activate another ring.",
+          "level": "ADVANCED",
+          "contextHint": "Use drop() on the current ring to return to Quest, then call use(...) to activate the next ring. Ring constants are typically defined in the project Rings class."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.Quest.complete()",
+      "summary": "Finish the quest: clears thread-local context and asserts all collected soft assertions. Always call at the end of a test flow.",
+      "usages": [
+        {
+          "code": "quest.use(RING_OF_UI)\n     .browser().navigate(getUiConfig().baseUrl())\n     .complete()",
+          "description": "Finalize the fluent chain and fail the test if any collected soft assertions failed.",
+          "level": "CORE",
+          "contextHint": "Call once at the end of the test chain. complete() is what flushes soft assertions and clears QuestHolder; without it soft failures may not be reported and thread-local context may leak."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.validator.core.AssertionResult",
+      "summary": "Result of executing a single Assertion. Captures whether the assertion passed and carries any diagnostic details produced by the validator (message/context) for reporting.",
+      "usages": [
+        {
+          "code": "Assertion assertion = Assertion.builder()\n    .target(UiTablesAssertionTarget.TABLE_VALUES)\n    .type(TableAssertionTypes.NOT_CONTAINS_ROW)\n    .expected(\"ERROR\")\n    .soft(false)\n    .build();\n\nquest.use(RING_OF_UI)\n    .table().validate(Tables.ALL_TRANSACTIONS, assertion)\n    .drop().complete();\n",
+          "description": "AssertionResult is produced internally when a validator evaluates an Assertion. Tests usually don’t handle AssertionResult directly; they rely on the validator + quest.complete() to surface failures and diagnostics.",
+          "level": "ADVANCED",
+          "contextHint": "Framework-side: AssertionResult is emitted by the validation engine for reporting/logging. Test-side: prefer expressing validations via fluent services and assertions rather than consuming AssertionResult objects manually."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.validator.core.AssertionType",
+      "summary": "Marker interface describing how a value is validated (comparison/match semantics). Implemented by enums that define domain-specific assertion types (e.g., table assertions via TableAssertionTypes).",
+      "usages": [
+        {
+          "code": "public enum TableAssertionTypes implements AssertionType<TableAssertionTypes> {\n  CONTAINS_ROW,\n  NOT_CONTAINS_ROW;\n\n  @Override\n  public TableAssertionTypes enumImpl() {\n    return this;\n  }\n}\n\nAssertion a = Assertion.builder()\n    .target(UiTablesAssertionTarget.ROW_VALUES)\n    .type(TableAssertionTypes.CONTAINS_ROW)\n    .expected(\"TELECOM\")\n    .soft(true)\n    .build();\n",
+          "description": "Use an AssertionType enum to declare the validation rule (e.g., contains row / not contains row for tables). The validator executes the correct comparison logic based on the enum constant.",
+          "level": "CORE",
+          "contextHint": "Choose an AssertionType that matches the AssertionTarget domain you’re validating (table types for table targets). Keep expected values aligned with what the validator extracts (row strings, collections, element states, etc.)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.SuperQuest",
+      "summary": "Active execution context used by project-side helpers (data creators, preconditions, rippers, hooks). You can obtain it via QuestHolder.get() from anywhere during a running test thread. SuperQuest provides access to shared storage/soft assertions and also exposes getOriginal() to reach the underlying Quest chain when needed.",
+      "usages": [
+        {
+          "code": "SuperQuest quest = QuestHolder.get();\nStorage storage = quest.getStorage();\n\n// Example: read/write to a namespace used by preconditions\nstorage.sub(PRE_ARGUMENTS).put(\"PURCHASE_CURRENCY\", purchaseModel);\n",
+          "description": "Get the active SuperQuest for the current test thread and access its Storage. This is the typical entry point for project-side helper code where the Quest parameter is not available.",
+          "level": "CORE",
+          "contextHint": "Prefer the injected Quest parameter in test methods. QuestHolder.get() is intended for helper code that runs during test execution on the same thread (data creators, preconditions, cleanup functions)."
+        },
+        {
+          "code": "SuperQuest quest = QuestHolder.get();\n\n// Access the underlying Quest chain when you need to continue fluent chaining\nquest.getOriginal()\n    .use(RING_OF_UI)\n    .browser().navigate(getUiConfig().baseUrl())\n    .complete();\n",
+          "description": "Access the underlying Quest instance via getOriginal() when helper code needs to switch back into the raw Quest chain (e.g., to activate a ring from a utility that only has SuperQuest).",
+          "level": "ADVANCED",
+          "contextHint": "Usually you don’t need this directly. Tests should use the Quest parameter; rings use drop(); helpers use SuperQuest mainly for storage access. Use getOriginal() only when a helper must explicitly drive ring execution."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.StaticTestData",
+      "summary": "Attach a StaticDataProvider to a test (or class) so its staticTestData() map is loaded into the Quest storage before the test runs.",
+      "usages": [
+        {
+          "code": "@Test\n@StaticTestData(StaticData.class)\nvoid usesStaticUiData(Quest quest) {\n  var username = retrieve(staticTestData(StaticData.USERNAME), String.class);\n  var password = retrieve(staticTestData(StaticData.PASSWORD), String.class);\n\n  quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .input().insert(LoginFields.USERNAME, username)\n      .input().insert(LoginFields.PASSWORD, password)\n      .button().click(LoginButtons.SIGN_IN)\n      .complete();\n}\n",
+          "description": "Load project-defined static test data before the test runs, then retrieve values via DataExtractorsTest.staticTestData(...) + BaseQuest.retrieve(...).",
+          "level": "CORE",
+          "contextHint": "Project-side: StaticData is a class that implements StaticDataProvider and returns Map<String,Object>. Test-side: apply @StaticTestData on the test method (or class) before calling retrieve(staticTestData(...)) to access the loaded values."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.Ring",
+      "summary": "Marks a class as a ROA Ring: a Spring-managed test service (@Service) with prototype scope and lazy initialization. Rings are activated from tests via quest.use(RING_CLASS) to expose a fluent domain/service API (e.g., UI, API, or custom business rings).",
+      "usages": [
+        {
+          "code": "@Ring(\"PurchaseService\")\npublic class PurchaseService extends FluentService {\n\n  // ... fluent steps exposed by this ring\n\n}\n\n// Test-side usage\nquest.use(RING_OF_PURCHASE_SERVICE)\n     .purchaseCurrency(/* ... */)\n     .validatePurchase()\n     .complete();\n",
+          "description": "Define a ring by annotating a FluentService with @Ring(\"...\"). The framework registers it as a Spring-managed service and allows tests to activate it through quest.use(...), enabling readable, chained flows without manual instantiation.",
+          "level": "CORE",
+          "contextHint": "Framework/project-side: annotate only FluentService (or your base ring type) implementations that should be resolved by the ROA container. Test-side: always activate rings via quest.use(...) rather than new-ing services; rings are intended to be container-managed and used as part of the quest chain."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.DataExtractorImpl",
+      "summary": "Concrete DataExtractor implementation used to build custom extractors (optional subKey + key + extraction lambda). In tests you usually prefer existing extractor helpers/registries (e.g., DataExtractorUI). Use DataExtractorImpl only when you need a custom extraction that does not exist yet.",
+      "usages": [
+        {
+          "code": "DataExtractor<String> latestCartTotal = new DataExtractorImpl<>(\n    StorageKeysUi.UI,\n    \"CART_TOTAL\",\n    raw -> ((String) raw).replace(\"$\", \"\").trim()\n);\n\nString total = retrieve(latestCartTotal, String.class);\n",
+          "description": "Create a custom extractor that reads a raw stored value from a UI sub-storage namespace and applies a transformation lambda to return a typed value suitable for assertions or chaining.",
+          "level": "ADVANCED",
+          "contextHint": "Use when an existing UI extractor helper is not sufficient (custom normalization, multi-step extraction). Keep extraction lambdas focused and reusable, and prefer central registries/helpers for common extractors."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.base.Services",
+      "summary": "Framework-provided Spring service container exposed only to BaseQuestSequential.beforeAll/afterAll. Use it to fetch underlying Spring services from a Ring (e.g., a low-level UI driver/session service from UiServiceFluent) when you need low-level access in class-level setup/cleanup.",
+      "usages": [
+        {
+          "code": "@Override\nprotected void beforeAll(Services services) {\n  // Example: fetch an underlying service bean from a Ring-managed fluent service\n  SmartWebDriver driver = services.service(UiServiceFluent.class, SmartWebDriver.class);\n}\n",
+          "description": "In BaseQuestSequential hooks, fetch an underlying service (by type) from a Ring instance managed by Spring. This is useful for one-time setup/cleanup where you need direct access to an internal bean rather than going through the quest fluent chain.",
+          "level": "ADVANCED",
+          "contextHint": "Only available inside BaseQuestSequential.beforeAll/afterAll. Prefer using quest.use(RING_OF_UI) in test flows; use Services only when you explicitly need an underlying Spring bean in class-level hooks (e.g., direct driver/session access for setup/cleanup)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.StorageKeysTest",
+      "summary": "Framework storage namespaces used during a test run. Use these keys when you need to read/write data in specific lifecycle areas (test arguments, precondition arguments, static data, hook data).",
+      "usages": [
+        {
+          "code": "SuperQuest quest = QuestHolder.get();\n\nPurchaseForeignCurrency fromArgs = quest.getStorage()\n    .sub(StorageKeysTest.ARGUMENTS)\n    .getByClass(\"PURCHASE_CURRENCY\", PurchaseForeignCurrency.class);\n",
+          "description": "Read test-argument data (values produced/registered for the current test run). Commonly used by project-side utilities when building context-aware models or reusing previously created artifacts.",
+          "level": "CORE",
+          "contextHint": "Use in project-side code (data creators, utilities, custom rings) when you want to reuse values already available during the test body. ARGUMENTS typically corresponds to data available during the test execution."
+        },
+        {
+          "code": "SuperQuest quest = QuestHolder.get();\n\nPurchaseForeignCurrency fromPreArgs = quest.getStorage()\n    .sub(StorageKeysTest.PRE_ARGUMENTS)\n    .getByClass(\"PURCHASE_CURRENCY\", PurchaseForeignCurrency.class);\n",
+          "description": "Read precondition argument data created during @Journey execution (pre-test setup). Useful when a later precondition/utility depends on what was prepared before the test body runs.",
+          "level": "CORE",
+          "contextHint": "Use when your setup flow (@Journey / Preconditions) stores inputs or produced models for later reuse. PRE_ARGUMENTS is typically populated by pre-test journeys."
+        },
+        {
+          "code": "SuperQuest quest = QuestHolder.get();\n\nMap<String, Object> staticData = quest.getStorage()\n    .sub(StorageKeysTest.STATIC_DATA)\n    .get(StorageKeysTest.STATIC_DATA, Map.class);\n\nString baseUrl = (String) staticData.get(\"BASE_URL\");\n",
+          "description": "Read the raw STATIC_DATA map that was loaded via @StaticTestData and access values directly by string key.",
+          "level": "ADVANCED",
+          "contextHint": "Prefer DataExtractorsTest.staticTestData(key) + retrieve(...) for static data access. Use direct map access only in rare project-side utilities that need raw map operations."
+        },
+        {
+          "code": "SuperQuest quest = QuestHolder.get();\n\nMap<Object, Object> hooks = quest.getStorage().get(StorageKeysTest.HOOKS, Map.class);\nObject sessionId = hooks.get(UiHookKeys.SESSION_ID);\n",
+          "description": "Read hook-scoped values written by hooks into the HOOKS map and access them via a key object (often an enum).",
+          "level": "ADVANCED",
+          "contextHint": "Prefer BaseQuest.hookData(key, type) in tests. Use direct HOOKS map access mainly inside framework/project utilities where BaseQuest is not available."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.hooks.HookExecution",
+      "summary": "Enum used by hook annotations (e.g., @DbHook.when) to control whether a hook runs once before all tests in a class or once after all tests in a class.",
+      "usages": [
+        {
+          "code": "@UI\n@DbHook(when = HookExecution.BEFORE, type = \"INITIALIZE_H2\")\nclass AdvancedFeaturesTest extends BaseQuest {\n}\n",
+          "description": "Run the hook flow once before any @Test methods in the class (setup phase).",
+          "level": "CORE",
+          "contextHint": "Use BEFORE for environment initialization (DB seed/warmup), shared setup, or storing hook outputs for tests to read via hookData(...)."
+        },
+        {
+          "code": "@UI\n@DbHook(when = HookExecution.AFTER, type = \"CLEANUP_H2\")\nclass AdvancedFeaturesTest extends BaseQuest {\n}\n",
+          "description": "Run the hook flow once after all @Test methods in the class finish (teardown phase).",
+          "level": "CORE",
+          "contextHint": "Use AFTER for one-time class cleanup (clearing seeded data, closing shared resources). If cleanup must run per test, prefer @Ripper instead."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.QuestHolder",
+      "summary": "Thread-local access to the active SuperQuest for the current test thread. Use it only in places where the Quest parameter is not available (e.g., DataCreator, Preconditions, DataCleaner, custom rings/helpers).",
+      "usages": [
+        {
+          "code": "SuperQuest quest = QuestHolder.get();\n\n// Example: read something stored by a precondition into PRE_ARGUMENTS\nPurchaseForeignCurrency model = quest.getStorage()\n    .sub(PRE_ARGUMENTS)\n    .getByClass(\"PURCHASE_CURRENCY\", PurchaseForeignCurrency.class);\n",
+          "description": "Get the active SuperQuest and read data from storage when you're outside the test method (no Quest parameter available).",
+          "level": "CORE",
+          "contextHint": "Typical in project-side utilities (DataCreator / Preconditions / DataCleaner / custom rings). Avoid using QuestHolder in test methods—prefer the injected Quest parameter."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.QuestHolder.clear()",
+      "summary": "Remove the SuperQuest from the current thread to avoid leaking test context between tests.",
+      "usages": [
+        {
+          "code": "quest.complete();",
+          "description": "Normally you never call QuestHolder.clear() directly—Quest.complete() does it for you.",
+          "level": "CORE",
+          "contextHint": "Call complete() at the end of every test flow. Only clear() manually in very rare custom runner/extension scenarios."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.QuestHolder.set(io.cyborgcode.roa.framework.quest.SuperQuest)",
+      "summary": "Bind a SuperQuest to the current thread (framework/extension responsibility).",
+      "usages": [
+        {
+          "code": "QuestHolder.set(superQuest);",
+          "description": "Framework/extension usage: binds the current SuperQuest during test startup so rings and helpers can access it via QuestHolder.get().",
+          "level": "ADVANCED",
+          "contextHint": "Do not call from normal test or project code. This is handled by the ROA engine (e.g., QuestFactory/Oracle/decorators) before the test body runs."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.quest.QuestHolder.get()",
+      "summary": "Return the SuperQuest bound to the current thread (or null if not initialized).",
+      "usages": [
+        {
+          "code": "SuperQuest quest = QuestHolder.get();\n\nif (quest != null) {\n  String token = quest.getStorage().get(MyKeys.AUTH_TOKEN, String.class);\n}\n",
+          "description": "Access storage/artifacts from helper code that runs during a test thread but doesn’t receive Quest as a parameter.",
+          "level": "CORE",
+          "contextHint": "Use inside project-side factories/services (e.g., DataCreator, Preconditions, cleanup functions). If QuestHolder.get() is null, you're calling it outside the ROA-managed test execution."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.Journey",
+      "summary": "Test-side precondition annotation. Runs before the test body and executes a project-defined precondition referenced by a string key (typically coming from a project enum implementing PreQuestJourney). Optionally passes input models via @JourneyData(...) (keys typically coming from a project enum implementing DataForge). Can be repeated multiple times on the same test (execution order controlled by order; defaults to 0).",
+      "usages": [
+        {
+          "code": "@Test\n@Journey(\n    value = \"PURCHASE_CURRENCY_PRECONDITION\",\n    journeyData = { @JourneyData(\"PURCHASE_CURRENCY\") }\n)\nvoid journey_single_withJourneyData(Quest quest) {\n  quest\n      .use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Single journey with input data: the framework runs one precondition before the test body and provides crafted input model(s) to that precondition. In real projects, value is usually written as a constant from an enum that implements PreQuestJourney (e.g., Preconditions implements PreQuestJourney<Preconditions>), and journeyData values are usually written as constants from an enum that implements DataForge (e.g., DataCreator implements DataForge<DataCreator>).",
+          "level": "CORE",
+          "contextHint": "Use when your precondition needs input models (e.g., create something using crafted data). order is optional and can be omitted for a single @Journey; specify it when multiple @Journey annotations exist."
+        },
+        {
+          "code": "@Test\n@Journey(\n    value = \"USER_LOGIN_PRECONDITION\"\n)\nvoid journey_single_withoutJourneyData(Quest quest) {\n  quest\n      .use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Single journey without input data: the framework runs one precondition before the test body when no crafted models are required. In real projects, value is typically written as a constant from an enum that implements PreQuestJourney (e.g., Preconditions implements PreQuestJourney<Preconditions>) so the precondition registry stays strongly-typed and discoverable.",
+          "level": "CORE",
+          "contextHint": "Use when setup can run without any crafted inputs (e.g., login, navigation, environment reset). order is optional and can be omitted for a single @Journey."
+        },
+        {
+          "code": "@Test\n@Journey(\n    value = \"USER_LOGIN_PRECONDITION\",\n    order = 0\n)\n@Journey(\n    value = \"PURCHASE_CURRENCY_PRECONDITION\",\n    journeyData = { @JourneyData(\"PURCHASE_CURRENCY\") },\n    order = 1\n)\nvoid journey_multiple(Quest quest) {\n  quest\n      .use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Multiple journeys: stack @Journey annotations to run multiple preconditions before the test body. order controls execution order (lower runs first). In real projects, values are typically constants from a PreQuestJourney enum (e.g., Preconditions implements PreQuestJourney<Preconditions>), and any JourneyData entries are typically constants from a DataForge enum (e.g., DataCreator implements DataForge<DataCreator>).",
+          "level": "CORE",
+          "contextHint": "Prefer explicit order values whenever more than one @Journey is present so setup executes deterministically. order is optional (defaults to 0), but should be set when multiple journeys exist. Use journeyData only on the journeys that require crafted inputs."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.validator.core.AssertionTarget",
+      "summary": "Marker interface for assertion targets (where an assertion is applied). Implemented by enums that define a concrete target domain (e.g., UI tables via UiTablesAssertionTarget).",
+      "usages": [
+        {
+          "code": "public enum UiTablesAssertionTarget implements AssertionTarget<UiTablesAssertionTarget> {\n  ROW_VALUES,\n  TABLE_VALUES,\n  ROW_ELEMENTS,\n  TABLE_ELEMENTS;\n\n  @Override\n  public UiTablesAssertionTarget enumImpl() {\n    return this;\n  }\n}\n\nAssertion a = Assertion.builder()\n    .target(UiTablesAssertionTarget.ROW_VALUES)\n    .type(TableAssertionTypes.CONTAINS_ROW)\n    .expected(\"TELECOM\")\n    .soft(true)\n    .build();\n",
+          "description": "Use an AssertionTarget enum to declare what the validator should assert against (e.g., table row values vs table element collection). The validator interprets the target to select the correct extraction/validation path.",
+          "level": "CORE",
+          "contextHint": "Targets are domain-specific: UI table assertions commonly use UiTablesAssertionTarget. Pair the target with a compatible AssertionType (e.g., TableAssertionTypes) for meaningful validations."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.parameters.DataRipper",
+      "summary": "Project-side contract for post-test cleanup (teardown). Implement a project enum (e.g., DataCleaner) that maps cleanup targets to a Consumer<SuperQuest>, then trigger it from tests via @Ripper(targets = { \"<KEY>\" }).",
+      "usages": [
+        {
+          "code": "public enum DataCleaner implements DataRipper<DataCleaner> {\n\n  DELETE_PURCHASE_CURRENCY(quest -> quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .insertion().cleanupPurchaseCurrency()\n      .drop()),\n\n  ;\n\n  private final Consumer<SuperQuest> cleanup;\n\n  DataCleaner(Consumer<SuperQuest> cleanup) {\n    this.cleanup = cleanup;\n  }\n\n  @Override\n  public Consumer<SuperQuest> eliminate() {\n    return cleanup;\n  }\n\n  @Override\n  public DataCleaner enumImpl() {\n    return this;\n  }\n}\n\n@Test\n@Ripper(targets = { \"DELETE_PURCHASE_CURRENCY\" })\nvoid test(Quest quest) {\n  quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Define a project-side cleanup enum (DataRipper implementation) using a lambda Consumer<SuperQuest>, then reference the cleanup target from @Ripper on the test method so teardown runs automatically after the test finishes.",
+          "level": "CORE",
+          "contextHint": "Project-side: DataCleaner is created/maintained in the test project and represents your cleanup registry. Test-side: @Ripper runs after the test finishes; keep cleanup logic deterministic and safe to run even when the test fails mid-flow."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.DataExtractorsTest",
+      "summary": "Static factory for DataExtractor instances that read values from the STATIC_DATA map in quest storage (typically loaded via @StaticTestData).",
+      "usages": [
+        {
+          "code": "@Test\n@StaticTestData(UiStaticData.class)\nvoid usesStaticTestDataFromStorage(Quest quest) {\n  var username = retrieve(staticTestData(UiStaticData.USERNAME), String.class);\n  var password = retrieve(staticTestData(UiStaticData.PASSWORD), String.class);\n\n  quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .input().insert(LoginFields.USERNAME, username)\n      .input().insert(LoginFields.PASSWORD, password)\n      .button().click(LoginButtons.SIGN_IN)\n      .complete();\n}\n",
+          "description": "Load project static test data into storage via @StaticTestData, then extract typed values by key using DataExtractorsTest.staticTestData(key) + retrieve(...).",
+          "level": "CORE",
+          "contextHint": "Used inside tests after @StaticTestData has executed (method-level or class-level). The extractor reads from the STATIC_DATA storage namespace."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.storage.DataExtractorsTest.staticTestData(java.lang.String)",
+      "summary": "Creates a DataExtractor that reads the STATIC_DATA storage map and returns the value for the provided string key.",
+      "usages": [
+        {
+          "code": "@Test\n@StaticTestData(UiStaticData.class)\nvoid readsSingleStaticValue(Quest quest) {\n  var baseUrl = retrieve(staticTestData(UiStaticData.BASE_URL), String.class);\n\n  quest.use(RING_OF_UI)\n      .browser().navigate(baseUrl)\n      .complete();\n}\n",
+          "description": "Extract a single value from the static test data map by key and use it in the UI test flow.",
+          "level": "CORE",
+          "contextHint": "Pairs with @StaticTestData. Keys are usually constants from the project provider (e.g., UiStaticData.BASE_URL)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.Ripper",
+      "summary": "Test-side postcondition/cleanup annotation. Declares one or more cleanup targets that the framework executes after the test finishes (teardown) to remove created data and keep environments clean. Targets are typically written as constants from a project enum implementing DataRipper (e.g., DataCleaner implements DataRipper<DataCleaner>).",
+      "usages": [
+        {
+          "code": "@Test\n@Journey(\n    value = \"PURCHASE_CURRENCY_PRECONDITION\",\n    journeyData = { @JourneyData(\"PURCHASE_CURRENCY\") }\n)\n@Ripper(targets = { \"DELETE_PURCHASE_CURRENCY\" })\nvoid ripper_singleTarget(Quest quest) {\n  quest\n      .use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Single cleanup target: declare one teardown action to run automatically after the test. In real projects, the target is typically written as a constant from an enum implementing DataRipper (e.g., DataCleaner implements DataRipper<DataCleaner>), so cleanup actions are centrally registered and reusable across tests.",
+          "level": "CORE",
+          "contextHint": "Use on @Test methods. Prefer declarative cleanup via @Ripper targets instead of embedding teardown logic inside the test body. Targets should reference your project cleanup registry (DataRipper enum constants/keys)."
+        },
+        {
+          "code": "@Test\n@Ripper(targets = { \"DELETE_PURCHASE_CURRENCY\", \"DELETE_CREATED_USERS\" })\nvoid ripper_multipleTargets(Quest quest) {\n  quest\n      .use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Multiple cleanup targets: declare more than one teardown action when a test creates multiple data types that must be removed after execution. This keeps teardown declarative even for complex scenarios.",
+          "level": "ADVANCED",
+          "contextHint": "Use multiple targets when the test leaves behind multiple entities/resources. In real projects, targets typically come from a DataRipper enum (e.g., DataCleaner implements DataRipper<DataCleaner>) so cleanup stays consistent and centrally managed."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.data.StaticDataProvider",
+      "summary": "Project-side contract for supplying static key-value test data that the framework loads into quest storage before the test runs. Used together with @StaticTestData(Provider.class).",
+      "usages": [
+        {
+          "code": "public class UiStaticData implements StaticDataProvider {\n\n  public static final String USERNAME = \"username\";\n  public static final String PASSWORD = \"password\";\n\n  @Override\n  public Map<String, Object> staticTestData() {\n    Map<String, Object> data = new HashMap<>();\n    data.put(USERNAME, \"demo\");\n    data.put(PASSWORD, \"demo\");\n    return data;\n  }\n}\n",
+          "description": "Implement StaticDataProvider in your test project to define a map of reusable values (credentials, fixed form inputs, known UI configuration values) that can be preloaded before a test via @StaticTestData.",
+          "level": "CORE",
+          "contextHint": "Project-side provider class. The framework instantiates it and loads its staticTestData() map into storage when @StaticTestData(UiStaticData.class) is present. Tests typically read values via DataExtractorsTest.staticTestData(key) + retrieve(...)."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.framework.annotation.Smoke",
+      "summary": "Marks a test method as part of the Smoke suite (wraps JUnit @Tag(\"Smoke\")).",
+      "usages": [
+        {
+          "code": "@Test\n@Smoke\nvoid shouldLoginAndShowDashboard(Quest quest) {\n  quest.use(RING_OF_UI)\n      .browser().navigate(getUiConfig().baseUrl())\n      .complete();\n}\n",
+          "description": "Tag a single UI test method as Smoke (fast, high-signal checks like critical paths).",
+          "level": "CORE",
+          "contextHint": "Use on @Test methods only. Prefer Smoke for a small set of tests that must run quickly and catch major breakages."
+        }
+      ]
+    },
+    {
+      "id": "io.cyborgcode.roa.validator.core.AssertionTypes",
+      "summary": "Core assertion type enum for generic comparison semantics (used when validations are not domain-specific), commonly paired with generic AssertionTarget enums in validator flows.",
+      "usages": [
+        {
+          "code": "Assertion a = Assertion.builder()\n    .target(UiTablesAssertionTarget.TABLE_VALUES)\n    .type(AssertionTypes.CONTAINS)\n    .expected(\"TELECOM\")\n    .soft(true)\n    .build();\n\nquest.use(RING_OF_UI)\n    .table().validate(Tables.ALL_TRANSACTIONS, a)\n    .drop().complete();\n",
+          "description": "Use AssertionTypes when you want generic comparison semantics (e.g., contains/equals-like checks) applied through the validation layer.",
+          "level": "ADVANCED",
+          "contextHint": "Prefer domain-specific assertion enums (e.g., TableAssertionTypes) when available for clearer intent. Use AssertionTypes for generic checks where the validator target exposes a simple comparable value."
+        }
+      ]
+    }
+  ]
+}

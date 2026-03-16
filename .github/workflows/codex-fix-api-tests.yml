@@ -1,0 +1,254 @@
+name: Codex Fix Failed API Tests
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+on:
+  workflow_run:
+    workflows: ["API Tests"]
+    types: [completed]
+
+concurrency:
+  group: codex-fix-api-tests-${{ github.event.workflow_run.id }}
+  cancel-in-progress: false
+
+jobs:
+  codex-fix:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout failing SHA
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+
+      # 1) Download the FULL workflow run logs (zip) from the failed run
+      - name: Download workflow run logs (zip)
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const run_id = context.payload.workflow_run.id;
+            const { owner, repo } = context.repo;
+
+            const res = await github.rest.actions.downloadWorkflowRunLogs({
+              owner,
+              repo,
+              run_id,
+            });
+
+            const fs = require("fs");
+            fs.writeFileSync("failed-run-logs.zip", Buffer.from(res.data));
+            core.info("Saved failed-run-logs.zip");
+
+      - name: Unzip workflow logs
+        run: |
+          mkdir -p failed-run-logs
+          unzip -o failed-run-logs.zip -d failed-run-logs
+          echo "Unzipped workflow logs:"
+          find failed-run-logs -maxdepth 3 -type f | sort | head -n 200
+
+      # 2) Download artifacts produced by roa-tests.yml (final allure report + any allure-results)
+      - name: Download Allure artifacts from failed run
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const run_id = context.payload.workflow_run.id;
+            const { owner, repo } = context.repo;
+
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner,
+              repo,
+              run_id
+            });
+
+            const fs = require("fs");
+            const path = require("path");
+
+            fs.mkdirSync("failed-run-artifacts", { recursive: true });
+
+            // Prefer the merged final report if present, otherwise take all allure-results artifacts.
+            const preferred = [
+              "final-allure-report-api-test-framework",
+            ];
+
+            const picked = [];
+
+            for (const name of preferred) {
+              const found = artifacts.data.artifacts.find(a => a.name === name);
+              if (found) picked.push(found);
+            }
+
+            if (picked.length === 0) {
+              // Fallback: download all allure-related artifacts
+              for (const a of artifacts.data.artifacts) {
+                if (a.name.startsWith("allure-results-") || a.name.startsWith("final-allure-report")) {
+                  picked.push(a);
+                }
+              }
+            }
+
+            core.info(`Artifacts total: ${artifacts.data.artifacts.length}`);
+            core.info(`Artifacts selected: ${picked.map(a => a.name).join(", ") || "(none)"}`);
+
+            for (const artifact of picked) {
+              const download = await github.rest.actions.downloadArtifact({
+                owner,
+                repo,
+                artifact_id: artifact.id,
+                archive_format: "zip",
+              });
+
+              const out = path.join("failed-run-artifacts", `${artifact.name}.zip`);
+              fs.writeFileSync(out, Buffer.from(download.data));
+              core.info(`Downloaded ${artifact.name} -> ${out}`);
+            }
+
+      - name: Unzip artifacts
+        run: |
+          mkdir -p failed-run-artifacts/unzipped
+          shopt -s nullglob
+          for f in failed-run-artifacts/*.zip; do
+            unzip -o "$f" -d failed-run-artifacts/unzipped
+          done
+          echo "Artifacts extracted:"
+          find failed-run-artifacts/unzipped -maxdepth 4 -type f | sort | head -n 200
+
+      - name: Build failure summary for Codex (cheap)
+        run: |
+          mkdir -p codex-context
+          {
+            echo "=== Key failures (top 300 matches) ==="
+            grep -R --line-number -E \
+              "BUILD FAILURE|Failed tests:|Tests run:|Errors:|Failures:|AssertionError|expected:|but was:|HTTP/|status code|NoSuchMethodError|NullPointerException|Timeout" \
+              failed-run-logs failed-run-artifacts/unzipped 2>/dev/null \
+              | head -n 300
+          } > codex-context/failure-summary.txt
+
+          echo "Wrote codex-context/failure-summary.txt"
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # Make Maven runnable inside Codex sandbox (workspace-write)
+      - name: Prepare local Maven repo inside workspace
+        run: mkdir -p .m2/repository
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Download OpenAPI spec
+        run: |
+          mkdir -p specs
+          curl -s https://reqres.in/openapi.json -o specs/openapi.json
+
+      - name: Configure Codex MCP
+        run: |
+          mkdir -p .codex-home
+          cat > .codex-home/config.toml <<'EOF'
+          approval_policy = "never"
+
+          [mcp_servers.reqres_openapi]
+          command = "npx"
+          args = [
+            "-y",
+            "@ivotoby/openapi-mcp-server",
+            "--api-base-url",
+            "https://reqres.in",
+            "--openapi-spec",
+            "specs/openapi.json"
+          ]
+          startup_timeout_sec = 20
+          tool_timeout_sec = 90
+          required = true
+          EOF
+
+      - name: Create Codex prompt
+        run: |
+          mkdir -p .github/codex/prompts
+          cat > .github/codex/prompts/fix-api-tests.md <<'EOF'
+          The "API Tests" GitHub Actions workflow failed.
+
+          You have access to:
+          - Full workflow logs under: failed-run-logs/
+          - Allure report / results under: failed-run-artifacts/unzipped/
+          - The repository checkout at the failing SHA
+          - A local OpenAPI spec at: specs/openapi.json
+          - An MCP server named: reqres_openapi
+          
+          Start by reading `codex-context/failure-summary.txt`. Only open other logs/artifacts if the summary is insufficient to identify the failing test(s) and root cause.
+
+          Task:
+          1) Identify the failing API test(s) and root cause using logs + Allure artifacts.
+          2) Use the MCP server ONLY for contract lookup:
+             - inspect endpoints
+             - inspect request parameters
+             - inspect response schemas
+             - inspect expected status codes
+          3) Do NOT use MCP for exploratory live API behavior unless absolutely necessary.
+          4) Fix ONLY test code / test-support code in this repository (do not change unrelated app code).
+          5) Prefer minimal changes. Do not disable tests or reduce coverage to "make it green".
+          6) Prefer contract-aligned fixes over brittle assertion changes.
+          7) After changes, do Iteration loop (MUST follow):
+             - Run: mvn -U -pl api-test-framework -am test -Dmaven.repo.local=$GITHUB_WORKSPACE/.m2/repository
+             - If tests fail due to code/test reasons: apply the minimal fix, then rerun the same command.
+             - Repeat until the command succeeds, but stop after 3 iterations and summarize why it can’t be fixed safely.
+             - If the failure is environmental (e.g., cannot resolve repo.maven.apache.org / network/DNS): retry the same command up to 3 times with short pauses; if still failing, stop and report “environmental – cannot validate”.
+          8) Summarize:
+             - root cause
+             - whether MCP contract lookup was used
+             - files changed
+             - why this fix is correct
+             - test command output summary
+
+          Notes:
+          - This is Java + Maven API automation.
+          - Focus on broken assertions, outdated contract expectations, data setup, and contract mismatches.
+          EOF
+
+      - name: Run Codex (full-auto)
+        id: run_codex
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/fix-api-tests.md
+          output-file: codex-output.md
+          safety-strategy: drop-sudo
+          sandbox: workspace-write
+          codex-home: .codex-home
+          codex-args: '["--model","gpt-5.1-codex-mini"]'
+
+      - name: Show diff
+        run: |
+          git status
+          git diff --stat
+
+      - name: Create PR with Codex fix
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ github.token }}
+          base: main
+          commit-message: "fix(api-tests): Codex repair after failed API Tests run"
+          branch: codex/fix-api-tests-${{ github.event.workflow_run.run_number }}
+          title: "Codex fix: API Tests failed (run #${{ github.event.workflow_run.run_number }})"
+          body: |
+            Automated PR generated by Codex after a failed **API Tests** workflow run.
+
+            - Run: ${{ github.event.workflow_run.html_url }}
+            - SHA: ${{ github.event.workflow_run.head_sha }}
+
+            Codex output: `codex-output.md`
+          add-paths: |
+            api-test-framework
+            codex-output.md
+            .github/codex/prompts/fix-api-tests.md

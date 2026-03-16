@@ -1,0 +1,253 @@
+app:
+  name: "ReqRes"
+  domain: "User Management API (Demo + QA Backend)"
+  type: "API Service"
+  version: "1.0"
+  base_url: "https://reqres.in/api"
+  description: >
+    ReqRes is a hosted API surface used for prototyping, QA automation, and learning.
+    This app-knowledge focuses on the legacy demo endpoints under /api/* (e.g., /api/users,
+    /api/login, /api/register) and assumes x-api-key is required on every request in this project setup.
+
+references:
+  docs: "https://reqres.in/docs"
+  swagger_ui: "https://reqres.in/api-docs"
+  openapi_json: "https://reqres.in/openapi.json"
+
+# -------------------------------------------------
+# ACTORS / ROLES
+# -------------------------------------------------
+actors:
+  - id: "api_client"
+    description: "Client consuming the ReqRes API. Every request must include the project API key."
+    capabilities:
+      - retrieve_users
+      - retrieve_resources
+      - create_user
+      - update_user
+      - delete_user
+      - login
+      - register
+    restrictions:
+      - must_send_x_api_key_header_on_all_requests
+      - requests_without_x_api_key_are_forbidden
+
+# -------------------------------------------------
+# AUTHENTICATION / HEADERS
+# -------------------------------------------------
+authentication:
+  description: >
+    ReqRes requires a project API key on every request via the x-api-key header.
+    The /api/login and /api/register endpoints return a token as part of their demo
+    responses, but that token is for testing/demo purposes only and does not enforce
+    authorization. Tests may include it as a Bearer token for experimentation, but it
+    has no effect on access control.
+
+  headers:
+    - name: "x-api-key"
+      required: true
+      purpose: "Mandatory project API key. Must be sent on all requests."
+    - name: "Authorization"
+      required: false
+      format: "Bearer <token>"
+      purpose: >
+        Optional demo header. A token can be taken from /api/login or /api/register and
+        sent here, but it does not grant privileges or change behavior (demo only).
+
+  failure_modes:
+    global:
+      - missing_x_api_key
+      - invalid_x_api_key
+    auth_endpoints_only:
+      - missing_credentials
+      - invalid_credentials
+
+# -------------------------------------------------
+# SECRETS / RUNTIME CONFIG (NO VALUES IN REPO)
+# -------------------------------------------------
+secrets:
+  required:
+    - name: "REQRES_X_API_KEY"
+      used_as: "Request header: x-api-key (mandatory for all requests)"
+      source: "Environment variable (preferred) or local untracked secrets file"
+  optional_demo_credentials:
+    - name: "REQRES_LOGIN_EMAIL"
+      used_as: "POST /api/login body.email"
+      source: "Environment variable (preferred) or local untracked secrets file"
+    - name: "REQRES_LOGIN_PASSWORD"
+      used_as: "POST /api/login body.password"
+      source: "Environment variable (preferred) or local untracked secrets file"
+  rules:
+    - "Never hardcode secrets in tests, workflows, or docs."
+    - "Do not commit secret values to git."
+    - "Use placeholders in *.properties files and inject values at runtime."
+
+# -------------------------------------------------
+# CORE FLOWS
+# -------------------------------------------------
+core_flows:
+  - id: "list_users"
+    name: "Retrieve list of users"
+    category: "legacy_user_management"
+    business_goal: "Allow consumers to retrieve a paginated list of users"
+    actors: [ "api_client" ]
+    request:
+      method: "GET"
+      path: "/api/users"
+      query_params: [ "page", "per_page" ]
+    expected:
+      status_codes: [ 200, 400 ]
+
+  - id: "get_single_user"
+    name: "Retrieve single user"
+    category: "legacy_user_management"
+    business_goal: "Allow consumers to retrieve details for a specific user"
+    actors: [ "api_client" ]
+    request:
+      method: "GET"
+      path: "/api/users/{id}"
+      path_params: [ "id" ]
+    expected:
+      status_codes: [ 200, 404 ]
+
+  - id: "create_user"
+    name: "Create user"
+    category: "legacy_user_management"
+    business_goal: "Allow consumers to create a new user"
+    actors: [ "api_client" ]
+    request:
+      method: "POST"
+      path: "/api/users"
+      body_fields: [ "name", "job" ]
+    expected:
+      status_codes: [ 201, 400 ]
+
+  - id: "update_user"
+    name: "Update user"
+    category: "legacy_user_management"
+    business_goal: "Allow consumers to update an existing user"
+    actors: [ "api_client" ]
+    request:
+      method: "PUT"
+      path: "/api/users/{id}"
+      path_params: [ "id" ]
+      body_fields: [ "name", "job" ]
+    expected:
+      status_codes: [ 200, 400 ]
+
+  - id: "delete_user"
+    name: "Delete user"
+    category: "legacy_user_management"
+    business_goal: "Allow consumers to remove a user"
+    actors: [ "api_client" ]
+    request:
+      method: "DELETE"
+      path: "/api/users/{id}"
+      path_params: [ "id" ]
+    expected:
+      status_codes: [ 204 ]
+
+  - id: "list_resources"
+    name: "Retrieve list of resources"
+    category: "legacy_resources"
+    business_goal: "Allow consumers to retrieve a list of non-user resources"
+    actors: [ "api_client" ]
+    request:
+      method: "GET"
+      path: "/api/unknown"
+    expected:
+      status_codes: [ 200 ]
+
+  - id: "login"
+    name: "Demo user login"
+    category: "legacy_authentication"
+    business_goal: "Demonstrate authentication behavior"
+    actors: [ "api_client" ]
+    request:
+      method: "POST"
+      path: "/api/login"
+      body_fields: [ "email", "password" ]
+    expected:
+      status_codes: [ 200, 400 ]
+
+  - id: "register"
+    name: "Demo user registration"
+    category: "legacy_authentication"
+    business_goal: "Demonstrate registration behavior"
+    actors: [ "api_client" ]
+    request:
+      method: "POST"
+      path: "/api/register"
+      body_fields: [ "email", "password" ]
+    expected:
+      status_codes: [ 200, 400 ]
+
+# -------------------------------------------------
+# DOMAIN ENTITIES
+# -------------------------------------------------
+domain_entities:
+  - name: "User"
+    description: "A demo user record returned by legacy user endpoints."
+    responsibilities:
+      - "Be listed, retrieved, created, updated, deleted in demo flows"
+
+  - name: "Resource"
+    description: "A demo non-user entity returned by legacy resource endpoints."
+    responsibilities:
+      - "Be listed and retrieved for demo/testing purposes"
+
+  - name: "Project API Key"
+    description: "Key sent as x-api-key to obtain predictable project-scoped responses."
+    responsibilities:
+      - "Enable stable payloads for QA automation and CI"
+
+  - name: "Demo Token"
+    description: >
+      A token value returned by demo authentication endpoint (/api/login, /api/register).
+      It is provided for testing/demo scenarios only and does not enforce authorization
+      or change access behavior.
+    responsibilities:
+      - "Be asserted as present in demo auth responses"
+      - "Optionally be sent as Authorization: Bearer <token> for experimentation (no effect)"
+
+# -------------------------------------------------
+# TERMINOLOGY
+# -------------------------------------------------
+terminology:
+  - term: "Legacy endpoints"
+    meaning: "Public demo endpoints under /api/* such as /api/users and /api/login."
+  - term: "Project scope"
+    meaning: "Access + stable/predictable responses when sending x-api-key on requests."
+
+# -------------------------------------------------
+# BUSINESS RULES
+# -------------------------------------------------
+business_rules:
+  - id: "x_api_key_required"
+    description: "Every request must include the x-api-key header. Requests without it are forbidden."
+    category: "security"
+
+# -------------------------------------------------
+# USAGE AND QUALITY CONSIDERATIONS
+# -------------------------------------------------
+usage_and_quality_considerations:
+  ci_reliability:
+    - description: >
+        CI runners can trigger rate limits or WAF rules. Keep parallelism reasonable and
+        apply retry with exponential backoff for transient failures (especially 429).
+      risk_if_broken: "Intermittent failures and flaky suites"
+
+  contract_alignment:
+    - description: >
+        Treat the ReqRes OpenAPI/Swagger UI as the source of truth for endpoint paths,
+        payload shapes, and status codes. Align assertions to the spec.
+      risk_if_broken: "Incorrect assertions and brittle tests"
+
+# -------------------------------------------------
+# DATA ACCESS (OPTIONAL)
+# -------------------------------------------------
+database:
+  available: false
+  description: >
+    ReqRes is a hosted mock/demo backend. Do not assume permanent persistence across runs.
+    Treat created/updated data as non-durable and validate behavior primarily via responses.

@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": ""
+      }
+    } ,
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
+    },
+    "jira": {
+      "command": "node",
+      "args": ["./tools/jira-mcp/dist/index.js"],
+      "env": {
+        "JIRA_HOST": "https://cyborgcode-team.atlassian.net",
+        "JIRA_EMAIL": "${JIRA_EMAIL}",
+        "JIRA_API_TOKEN": "${JIRA_API_TOKEN}"
+      }
+    },
+    "swagger": {
+      "command": "npx",
+      "args": ["-y", "@apidevtools/openapi-mcp-server"],
+      "env": {
+        "OPENAPI_SPEC_URL": "${SWAGGER_SPEC_URL}"
+      }
+    }
+  }
+}

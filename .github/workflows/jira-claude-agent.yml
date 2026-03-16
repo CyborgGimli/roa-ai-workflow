@@ -1,0 +1,189 @@
+name: Jira Claude Agent
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+on:
+  repository_dispatch:
+    types: [jira-claude-agent]
+
+jobs:
+  implement:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate required secrets
+        env:
+          JIRA_HOST: ${{ secrets.JIRA_HOST }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_PACKAGES_USER: ${{ secrets.GH_PACKAGES_USER }}
+          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
+        run: |
+          MISSING=()
+          [[ -z "$JIRA_HOST" ]]         && MISSING+=("JIRA_HOST")
+          [[ -z "$JIRA_EMAIL" ]]        && MISSING+=("JIRA_EMAIL")
+          [[ -z "$JIRA_API_TOKEN" ]]    && MISSING+=("JIRA_API_TOKEN")
+          [[ -z "$ANTHROPIC_API_KEY" ]] && MISSING+=("ANTHROPIC_API_KEY")
+          [[ -z "$GH_PACKAGES_USER" ]]  && MISSING+=("GH_PACKAGES_USER")
+          [[ -z "$GH_PACKAGES_PAT" ]]   && MISSING+=("GH_PACKAGES_PAT")
+          if [ ${#MISSING[@]} -gt 0 ]; then
+            echo "ERROR: The following GitHub Secrets are not set: ${MISSING[*]}"
+            echo "Add them at: Settings → Secrets and variables → Actions"
+            exit 1
+          fi
+          echo "All required secrets are present."
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Configure Maven settings
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml << 'EOF'
+          <settings>
+            <servers>
+              <server>
+                <id>github-roa-libraries</id>
+                <username>${{ secrets.GH_PACKAGES_USER }}</username>
+                <password>${{ secrets.GH_PACKAGES_PAT }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
+      - name: Build Jira MCP
+        run: |
+          cd tools/jira-mcp
+          npm ci
+          npm run build
+
+      - name: Fetch Jira labels and resolve module and intent
+        id: resolve
+        env:
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_HOST: ${{ secrets.JIRA_HOST }}
+        run: |
+          TICKET_KEY="${{ github.event.client_payload.ticket_key }}"
+
+          RESPONSE=$(curl -s \
+            -u "${JIRA_EMAIL}:${JIRA_API_TOKEN}" \
+            "${JIRA_HOST}/rest/api/3/issue/${TICKET_KEY}?fields=labels")
+
+          LABELS=$(echo "$RESPONSE" | jq -r '.fields.labels | join(",")' 2>/dev/null || echo "")
+          echo "Detected Jira labels: $LABELS"
+          echo "labels=$LABELS" >> $GITHUB_OUTPUT
+
+          # Resolve module — label takes priority, payload is fallback
+          if echo "$LABELS" | grep -q "test:ui"; then
+            MODULE="ui"
+            DIR="ui-complex-test-framework"
+          elif echo "$LABELS" | grep -q "test:api"; then
+            MODULE="api"
+            DIR="api-test-framework"
+          elif [ "${{ github.event.client_payload.module }}" = "ui" ]; then
+            MODULE="ui"
+            DIR="ui-complex-test-framework"
+          elif [ "${{ github.event.client_payload.module }}" = "api" ]; then
+            MODULE="api"
+            DIR="api-test-framework"
+          else
+            echo "ERROR: Cannot determine module. Add 'test:ui' or 'test:api' label to Jira ticket ${TICKET_KEY}, or pass 'module' in the dispatch payload."
+            exit 1
+          fi
+          echo "module=$MODULE" >> $GITHUB_OUTPUT
+          echo "dir=$DIR" >> $GITHUB_OUTPUT
+
+          # Resolve intent — priority: refactor:code > refactor:tests > increase:coverage > add:tests
+          if echo "$LABELS" | grep -q "refactor:code"; then
+            INTENT="refactor-code"
+          elif echo "$LABELS" | grep -q "refactor:tests"; then
+            INTENT="refactor-tests"
+          elif echo "$LABELS" | grep -q "increase:coverage"; then
+            INTENT="increase-coverage"
+          else
+            INTENT="add-tests"
+          fi
+          echo "intent=$INTENT" >> $GITHUB_OUTPUT
+          echo "Resolved → module=$MODULE | dir=$DIR | intent=$INTENT"
+
+          # Optional extra context from payload (for self-healing and other workflow integrations)
+          EXTRA_CONTEXT="${{ github.event.client_payload.context }}"
+          if [ -n "$EXTRA_CONTEXT" ]; then
+            echo "extra_context=Additional context provided by the caller:"$'\n'"${EXTRA_CONTEXT}" >> $GITHUB_OUTPUT
+          else
+            echo "extra_context=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Load and render prompt
+        id: prompt
+        env:
+          TICKET_KEY: ${{ github.event.client_payload.ticket_key }}
+          MODULE: ${{ steps.resolve.outputs.module }}
+          DIR: ${{ steps.resolve.outputs.dir }}
+          INTENT: ${{ steps.resolve.outputs.intent }}
+          LABELS: ${{ steps.resolve.outputs.labels }}
+          EXTRA_CONTEXT: ${{ steps.resolve.outputs.extra_context }}
+        run: |
+          RENDERED=$(envsubst '${TICKET_KEY} ${MODULE} ${DIR} ${INTENT} ${LABELS} ${EXTRA_CONTEXT}' \
+            < .claude/prompts/jira-agent.md)
+          {
+            echo 'content<<PROMPT_EOF'
+            echo "$RENDERED"
+            echo 'PROMPT_EOF'
+          } >> $GITHUB_OUTPUT
+
+      - name: Run Claude Code agent
+        id: agent
+        uses: anthropics/claude-code-action@v1
+        env:
+          JIRA_HOST: ${{ secrets.JIRA_HOST }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          max_turns: 50
+          prompt: ${{ steps.prompt.outputs.content }}
+
+      - name: Report failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const ticketKey = '${{ github.event.client_payload.ticket_key }}';
+            const intent    = '${{ steps.resolve.outputs.intent }}';
+            const labels    = '${{ steps.resolve.outputs.labels }}';
+            const dir       = '${{ steps.resolve.outputs.dir }}';
+            const runUrl    = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              title: `[Agent Failed] ${ticketKey}`,
+              body: [
+                `The jira-claude-agent workflow failed for **${ticketKey}**.`,
+                '',
+                `| Field   | Value |`,
+                `|---------|-------|`,
+                `| Intent  | ${intent} |`,
+                `| Labels  | ${labels} |`,
+                `| Module  | ${dir} |`,
+                `| Run     | [View logs](${runUrl}) |`,
+                '',
+                'Check the workflow run logs for the exact failure point.',
+              ].join('\n'),
+              labels: ['agent-failure'],
+            });

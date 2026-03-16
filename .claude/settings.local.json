@@ -1,0 +1,9 @@
+{
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "github",
+    "chrome-devtools",
+    "jira",
+    "swagger"
+  ]
+}
