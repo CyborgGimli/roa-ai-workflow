@@ -145,40 +145,44 @@ jobs:
             echo 'PROMPT_EOF'
           } >> $GITHUB_OUTPUT
 
-      - name: Run Claude Code agent
-        id: agent
-        uses: anthropics/claude-code-action@v1
+      - name: Write MCP config
         env:
           JIRA_HOST: ${{ secrets.JIRA_HOST }}
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: |
+          cat > $GITHUB_WORKSPACE/mcp-config.json << EOF
+          {
+            "mcpServers": {
+              "jira": {
+                "command": "node",
+                "args": ["$GITHUB_WORKSPACE/tools/jira-mcp/dist/index.js"],
+                "env": {
+                  "JIRA_HOST": "$JIRA_HOST",
+                  "JIRA_EMAIL": "$JIRA_EMAIL",
+                  "JIRA_API_TOKEN": "$JIRA_API_TOKEN"
+                }
+              },
+              "swagger": {
+                "command": "npx",
+                "args": [
+                  "-y",
+                  "@ivotoby/openapi-mcp-server",
+                  "--api-base-url", "https://reqres.in",
+                  "--openapi-spec", "https://reqres.in/openapi.json"
+                ]
+              }
+            }
+          }
+          EOF
+
+      - name: Run Claude Code agent
+        id: agent
+        uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          claude_args: "--max-turns 50 --model claude-sonnet-4-6"
-          mcp_config: |
-            {
-              "mcpServers": {
-                "jira": {
-                  "command": "node",
-                  "args": ["${{ github.workspace }}/tools/jira-mcp/dist/index.js"],
-                  "env": {
-                    "JIRA_HOST": "${{ secrets.JIRA_HOST }}",
-                    "JIRA_EMAIL": "${{ secrets.JIRA_EMAIL }}",
-                    "JIRA_API_TOKEN": "${{ secrets.JIRA_API_TOKEN }}"
-                  }
-                },
-                "swagger": {
-                  "command": "npx",
-                  "args": [
-                    "-y",
-                    "@ivotoby/openapi-mcp-server",
-                    "--api-base-url", "https://reqres.in",
-                    "--openapi-spec", "https://reqres.in/openapi.json"
-                  ]
-                }
-              }
-            }
+          claude_args: "--max-turns 50 --model claude-sonnet-4-6 --mcp-config ${{ github.workspace }}/mcp-config.json"
           prompt: ${{ steps.prompt.outputs.content }}
 
       - name: Report failure

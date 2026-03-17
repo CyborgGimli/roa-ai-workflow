@@ -167,31 +167,31 @@
             mkdir -p specs
             curl -s https://reqres.in/openapi.json -o specs/openapi.json
 
-        # NOTE: Claude Code Action starts MCP servers internally via mcp_config —
-        # no separate "configure MCP" shell step is needed (unlike Codex which uses .codex-home/config.toml).
+        - name: Write MCP config
+          run: |
+            cat > $GITHUB_WORKSPACE/mcp-config.json << EOF
+            {
+              "mcpServers": {
+                "reqres_openapi": {
+                  "command": "npx",
+                  "args": [
+                    "-y",
+                    "@ivotoby/openapi-mcp-server",
+                    "--api-base-url", "https://reqres.in",
+                    "--openapi-spec", "$GITHUB_WORKSPACE/specs/openapi.json"
+                  ]
+                }
+              }
+            }
+            EOF
+
         - name: Run Claude Code agent
           id: run_claude
           uses: anthropics/claude-code-action@v1
           with:
             anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
             github_token: ${{ secrets.GITHUB_TOKEN }}
-            claude_args: "--max-turns 20 --model claude-sonnet-4-6"
-            mcp_config: |
-              {
-                "mcpServers": {
-                  "reqres_openapi": {
-                    "command": "npx",
-                    "args": [
-                      "-y",
-                      "@ivotoby/openapi-mcp-server",
-                      "--api-base-url",
-                      "https://reqres.in",
-                      "--openapi-spec",
-                      "specs/openapi.json"
-                    ]
-                  }
-                }
-              }
+            claude_args: "--max-turns 20 --model claude-sonnet-4-6 --mcp-config ${{ github.workspace }}/mcp-config.json"
             prompt: |
               The "API Tests" GitHub Actions workflow failed.
               
