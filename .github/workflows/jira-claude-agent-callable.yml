@@ -194,15 +194,6 @@ jobs:
                   "JIRA_EMAIL": "$JIRA_EMAIL",
                   "JIRA_API_TOKEN": "$JIRA_API_TOKEN"
                 }
-              },
-              "swagger": {
-                "command": "npx",
-                "args": [
-                  "-y",
-                  "@ivotoby/openapi-mcp-server",
-                  "--api-base-url", "https://reqres.in",
-                  "--openapi-spec", "https://reqres.in/openapi.json"
-                ]
               }
             }
           }
