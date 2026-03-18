@@ -177,12 +177,18 @@ For intent = refactor-tests or refactor-code:
 mvn test -Pe2e -pl ${DIR} -am
 ```
 
-If tests fail:
+If the test execution fails with a **plugin resolution error** (any message containing
+`could not be resolved`, `PluginResolutionException`, or referencing `pandora-plugin-temp`
+or any `io.cyborgcode` plugin) — this is a CI infrastructure issue, NOT a code defect.
+**Immediately skip the test gate and proceed to Step 5.** Do not attempt to fix it.
+Note in the PR body: "Test execution skipped — plugin resolution failure (CI environment issue)."
+
+If tests fail due to code or assertion reasons:
 - Distinguish between test code errors (fix them) and application defects (report them)
-- Fix test code errors — wrong selectors, incorrect assertions, data mismatches, timing
+- Fix test code errors — wrong assertions, data mismatches, missing setup
 - Do NOT modify assertions to hide a real application defect — report it in the PR instead
 - Attempt fixes up to 3 times; if still failing after 3 attempts, document the failure
-  in the PR body and proceed — do not block the PR on an application-side defect
+  in the PR body and proceed to Step 5
 
 ---
 
