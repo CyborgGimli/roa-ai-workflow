@@ -18,6 +18,8 @@ public final class AssertionMessages {
     public static final String CREATED_USER_NAME_INCORRECT = "The created user's name does not match the expected value!";
     public static final String CREATED_USER_JOB_INCORRECT = "The created user's job title does not match the expected value!";
     public static final String CREATED_AT_INCORRECT = "The creation date of the user does not match the expected value!";
+    public static final String UPDATED_USER_NAME_INCORRECT = "The updated user's name does not match the expected value!";
+    public static final String UPDATED_USER_JOB_INCORRECT = "The updated user's job title does not match the expected value!";
 
     public String userWithFirstNameNotFound(String firstName) {
         return String.format("User with first name '%s' not found", firstName);

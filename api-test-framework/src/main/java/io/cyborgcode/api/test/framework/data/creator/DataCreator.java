@@ -26,7 +26,8 @@ public enum DataCreator implements DataForge<DataCreator> {
    LOGIN_ADMIN_USER(DataCreatorFunctions::loginAdminUser),
    USER_JUNIOR(DataCreatorFunctions::juniorUser),
    USER_SENIOR(DataCreatorFunctions::seniorUser),
-   USER_INTERMEDIATE(DataCreatorFunctions::intermediateUser);
+   USER_INTERMEDIATE(DataCreatorFunctions::intermediateUser),
+   USER_UPDATE(DataCreatorFunctions::updateUser);
 
    public static final class Data {
 
@@ -38,6 +39,7 @@ public enum DataCreator implements DataForge<DataCreator> {
       public static final String USER_JUNIOR = "USER_JUNIOR";
       public static final String USER_SENIOR = "USER_SENIOR";
       public static final String USER_INTERMEDIATE = "USER_INTERMEDIATE";
+      public static final String USER_UPDATE = "USER_UPDATE";
 
    }
 

@@ -26,7 +26,16 @@ public enum AppEndpoints implements Endpoint<AppEndpoints> {
    GET_USER(Method.GET, "/users/{id}"),
    POST_CREATE_USER(Method.POST, "/users"),
    POST_LOGIN_USER(Method.POST, "/login"),
-   DELETE_USER(Method.DELETE, "/users/{id}");
+   DELETE_USER(Method.DELETE, "/users/{id}"),
+   PUT_UPDATE_USER(Method.PUT, "/users/{id}"),
+   PUT_UPDATE_USER_UNAUTHENTICATED(Method.PUT, "/users/{id}") {
+      @Override
+      public RequestSpecification defaultConfiguration() {
+         RequestSpecification spec = Endpoint.super.defaultConfiguration();
+         spec.contentType(ContentType.JSON);
+         return spec;
+      }
+   };
 
    private final Method method;
    private final String url;

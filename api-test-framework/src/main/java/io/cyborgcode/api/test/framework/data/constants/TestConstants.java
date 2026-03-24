@@ -76,6 +76,7 @@ public class TestConstants {
       }
 
       public static final String USER_ONE_FIRST_NAME = "michael";
+      public static final int ID_TWO = 2;
       public static final int ID_THREE = 3;
       public static final String USER_THREE_EMAIL = "emma.wong@reqres.in";
 
@@ -133,6 +134,8 @@ public class TestConstants {
       public static final String USER_SENIOR_JOB = "Senior Leader";
       public static final String USER_INTERMEDIATE_NAME = "Mr. Morpheus";
       public static final String USER_INTERMEDIATE_JOB = "Intermediate Leader";
+      public static final String USER_UPDATE_NAME = "Zion";
+      public static final String USER_UPDATE_JOB = "Guardian";
    }
 
    public static class Login {

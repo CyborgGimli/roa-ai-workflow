@@ -35,6 +35,13 @@ public final class DataCreatorFunctions {
    private DataCreatorFunctions() {
    }
 
+   public static CreateUserDto updateUser() {
+      return CreateUserDto.builder()
+            .name(TestConstants.Roles.USER_UPDATE_NAME)
+            .job(TestConstants.Roles.USER_UPDATE_JOB)
+            .build();
+   }
+
    public static CreateUserDto leaderUser() {
       return CreateUserDto.builder()
             .name(TestConstants.Roles.USER_LEADER_NAME)
