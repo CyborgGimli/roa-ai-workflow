@@ -1,0 +1,19 @@
+🤖 CYBORG 🤖 2026-03-25T15:06:54,394 [scenario=UpdateUserTest.updateDifferentUserSuccess] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-25T15:06:54,434 [scenario=UpdateUserTest.updateDifferentUserSuccess] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-25T15:06:54,450 [scenario=UpdateUserTest.updateDifferentUserSuccess] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-25T15:06:54,475 [scenario=UpdateUserTest.updateDifferentUserSuccess] INFO  [QUEST] - The quest: 'updateDifferentUserSuccess(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2026-03-25T15:06:54,515 [scenario=UpdateUserTest.updateDifferentUserSuccess] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-03-25T15:06:55,467 [scenario=UpdateUserTest.updateDifferentUserSuccess] INFO  [API] - Prepared RequestSpecification with pathParams: {id=2}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2026-03-25T15:06:55,835 [scenario=UpdateUserTest.updateDifferentUserSuccess] STEP  [API] - Sending request to endpoint PUT-https://reqres.in/api/users/2.
+🤖 CYBORG 🤖 2026-03-25T15:06:55,847 [scenario=UpdateUserTest.updateDifferentUserSuccess] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2026-03-25T15:06:55,857 [scenario=UpdateUserTest.updateDifferentUserSuccess] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-03-25T15:06:57,153 [scenario=UpdateUserTest.updateDifferentUserSuccess] STEP  [API] - Response with status: 200 received from endpoint: PUT-https://reqres.in/api/users/2 in 1269ms.
+🤖 CYBORG 🤖 2026-03-25T15:06:57,207 [scenario=UpdateUserTest.updateDifferentUserSuccess] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-03-25T15:06:57,221 [scenario=UpdateUserTest.updateDifferentUserSuccess] EXTENDED [API] - Response headers: Date=Wed, 25 Mar 2026 15:06:57 GMT
+🤖 CYBORG 🤖 2026-03-25T15:06:57,257 [scenario=UpdateUserTest.updateDifferentUserSuccess] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2026-03-25T15:06:57,831 [scenario=UpdateUserTest.updateDifferentUserSuccess] EXTENDED [API] - Validation target: [{name=Morpheus Updated, AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2026-03-25T15:06:57,856 [scenario=UpdateUserTest.updateDifferentUserSuccess] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2026-03-25T15:06:57,908 [scenario=UpdateUserTest.updateDifferentUserSuccess] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Morpheus Updated, Actual: Morpheus Updated)
+🤖 CYBORG 🤖 2026-03-25T15:06:57,916 [scenario=UpdateUserTest.updateDifferentUserSuccess] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2026-03-25T15:06:57,924 [scenario=UpdateUserTest.updateDifferentUserSuccess] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2026-03-25T15:06:57,955 [scenario=UpdateUserTest.updateDifferentUserSuccess] INFO  [QUEST] - The quest of 'updateDifferentUserSuccess(Quest)' has concluded with glory. Status: SUCCESS. Duration: 3 seconds.

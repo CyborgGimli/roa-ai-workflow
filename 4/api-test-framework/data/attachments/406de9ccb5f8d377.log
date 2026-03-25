@@ -1,0 +1,20 @@
+🤖 CYBORG 🤖 2026-03-25T15:06:54,932 [scenario=UpdateUserTest.updateUserValidDataSuccess] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-25T15:06:55,020 [scenario=UpdateUserTest.updateUserValidDataSuccess] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-25T15:06:55,034 [scenario=UpdateUserTest.updateUserValidDataSuccess] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-25T15:06:55,055 [scenario=UpdateUserTest.updateUserValidDataSuccess] INFO  [QUEST] - The quest: 'updateUserValidDataSuccess(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2026-03-25T15:06:55,076 [scenario=UpdateUserTest.updateUserValidDataSuccess] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-03-25T15:06:55,468 [scenario=UpdateUserTest.updateUserValidDataSuccess] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2026-03-25T15:06:55,836 [scenario=UpdateUserTest.updateUserValidDataSuccess] STEP  [API] - Sending request to endpoint PUT-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2026-03-25T15:06:55,850 [scenario=UpdateUserTest.updateUserValidDataSuccess] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2026-03-25T15:06:55,863 [scenario=UpdateUserTest.updateUserValidDataSuccess] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-03-25T15:06:57,154 [scenario=UpdateUserTest.updateUserValidDataSuccess] STEP  [API] - Response with status: 200 received from endpoint: PUT-https://reqres.in/api/users/3 in 1259ms.
+🤖 CYBORG 🤖 2026-03-25T15:06:57,208 [scenario=UpdateUserTest.updateUserValidDataSuccess] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-03-25T15:06:57,223 [scenario=UpdateUserTest.updateUserValidDataSuccess] EXTENDED [API] - Response headers: Date=Wed, 25 Mar 2026 15:06:57 GMT
+🤖 CYBORG 🤖 2026-03-25T15:06:57,256 [scenario=UpdateUserTest.updateUserValidDataSuccess] INFO  [API] - Starting response validation with 3 assertion(s).
+🤖 CYBORG 🤖 2026-03-25T15:06:57,857 [scenario=UpdateUserTest.updateUserValidDataSuccess] EXTENDED [API] - Validation target: [{name=Morpheus Updated, job=Updated Leader, AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2026-03-25T15:06:57,870 [scenario=UpdateUserTest.updateUserValidDataSuccess] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2026-03-25T15:06:57,910 [scenario=UpdateUserTest.updateUserValidDataSuccess] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Morpheus Updated, Actual: Morpheus Updated)
+🤖 CYBORG 🤖 2026-03-25T15:06:57,921 [scenario=UpdateUserTest.updateUserValidDataSuccess] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: Updated Leader, Actual: Updated Leader)
+🤖 CYBORG 🤖 2026-03-25T15:06:57,929 [scenario=UpdateUserTest.updateUserValidDataSuccess] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2026-03-25T15:06:57,935 [scenario=UpdateUserTest.updateUserValidDataSuccess] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2026-03-25T15:06:57,954 [scenario=UpdateUserTest.updateUserValidDataSuccess] INFO  [QUEST] - The quest of 'updateUserValidDataSuccess(Quest)' has concluded with glory. Status: SUCCESS. Duration: 3 seconds.
