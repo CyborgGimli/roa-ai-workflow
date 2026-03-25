@@ -23,39 +23,6 @@
         <extended.logging>true</extended.logging>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>io.cyborgcode.pandora</groupId>
-                <artifactId>pandora-plugin-temp</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <configuration>
-                    <!--  base packages to scan  -->
-                    <basePackages>
-                        <param>io.cyborgcode.roa</param>
-                        <param>io.cyborgcode.ai.demo</param>
-                    </basePackages>
-                    <!--  optional tag filters  -->
-                    <includeTags/>
-                    <excludeTags/>
-                    <!--  truncate options list (0 = unlimited)  -->
-                    <maxAvailableOptions>50</maxAvailableOptions>
-                    <!--  also put test-classes on classpath?  -->
-                    <includeTests>false</includeTests>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>pandora-scan</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>open</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
     <dependencies>
         <dependency>
             <groupId>io.cyborgcode.roa</groupId>
@@ -106,6 +73,39 @@
                 <logFileName>logs/api-example.log</logFileName>
                 <extended.logging>true</extended.logging>
             </properties>
+        </profile>
+
+        <!-- Run locally only: mvn -Ppandora pandora:open -U -->
+        <profile>
+            <id>pandora</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.cyborgcode.pandora</groupId>
+                        <artifactId>pandora-plugin-temp</artifactId>
+                        <version>1.0-SNAPSHOT</version>
+                        <configuration>
+                            <basePackages>
+                                <param>io.cyborgcode.roa</param>
+                                <param>io.cyborgcode.ai.demo</param>
+                            </basePackages>
+                            <includeTags/>
+                            <excludeTags/>
+                            <maxAvailableOptions>50</maxAvailableOptions>
+                            <includeTests>false</includeTests>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>pandora-scan</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>open</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 

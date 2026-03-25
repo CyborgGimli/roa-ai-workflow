@@ -14,14 +14,19 @@ on:
         description: "Tags to exclude (comma-separated)"
         required: false
         default: "Flaky"
+  pull_request:
+    branches: [main]
+    paths:
+      - "ui-complex-test-framework/**"
+
 jobs:
   run:
     uses: CyborgCodeSyndicate/roa-github-workflows/.github/workflows/roa-tests.yml@v1.0.0-rc-2
     with:
       kind: ui
       project_module: ui-complex-test-framework
-      tags_include: ${{ github.event.inputs.tagsInclude }}
-      tags_exclude: ${{ github.event.inputs.tagsExclude }}
+      tags_include: ${{ github.event.inputs.tagsInclude || 'Regression' }}
+      tags_exclude: ${{ github.event.inputs.tagsExclude || 'Flaky' }}
       grid_node_max_sessions: 3
     secrets:
       maven_user:  ${{ secrets.GH_PACKAGES_USER }}
