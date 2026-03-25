@@ -133,6 +133,8 @@ public class TestConstants {
       public static final String USER_SENIOR_JOB = "Senior Leader";
       public static final String USER_INTERMEDIATE_NAME = "Mr. Morpheus";
       public static final String USER_INTERMEDIATE_JOB = "Intermediate Leader";
+      public static final String USER_UPDATED_NAME = "Morpheus Updated";
+      public static final String USER_UPDATED_JOB = "Updated Leader";
    }
 
    public static class Login {

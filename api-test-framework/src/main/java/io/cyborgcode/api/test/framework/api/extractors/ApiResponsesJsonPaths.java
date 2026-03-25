@@ -40,6 +40,10 @@ public enum ApiResponsesJsonPaths {
    CREATE_USER_NAME_RESPONSE("name"),
    CREATE_USER_JOB_RESPONSE("job"),
 
+   // --- Update User Response Fields ---
+   UPDATE_USER_NAME_RESPONSE("name"),
+   UPDATE_USER_JOB_RESPONSE("job"),
+
    // --- Miscellaneous ---
    TOKEN("token"),
    ERROR("error");
