@@ -81,12 +81,6 @@ Use the Swagger MCP to verify API contracts before writing any code:
 
 This step is mandatory for API tickets. Never guess endpoint paths, methods, or parameters.
 
-### Pandora (both modules — mandatory before any code generation)
-
-Invoke the `pandora` skill (`.claude/skills/pandora/SKILL.md`) to verify exact method
-signatures for every ROA framework class you will use.
-Do not rely on examples alone — Pandora is the source of truth for framework contracts.
-
 ---
 
 ## STEP 3 — Analyse requirements
@@ -176,12 +170,6 @@ For intent = refactor-tests or refactor-code:
 ```
 mvn test -Pe2e -pl ${DIR} -am
 ```
-
-If the test execution fails with a **plugin resolution error** (any message containing
-`could not be resolved`, `PluginResolutionException`, or referencing `pandora-plugin-temp`
-or any `io.cyborgcode` plugin) — this is a CI infrastructure issue, NOT a code defect.
-**Immediately skip the test gate and proceed to Step 5.** Do not attempt to fix it.
-Note in the PR body: "Test execution skipped — plugin resolution failure (CI environment issue)."
 
 If tests fail due to code or assertion reasons:
 - Distinguish between test code errors (fix them) and application defects (report them)
