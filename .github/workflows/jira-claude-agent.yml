@@ -173,7 +173,7 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          claude_args: "--max-turns 50 --model claude-sonnet-4-6 --mcp-config ${{ github.workspace }}/mcp-config.json --dangerously-skip-permissions"
+          claude_args: "--max-turns 50 --model claude-haiku-4-5-20251001 --mcp-config ${{ github.workspace }}/mcp-config.json --dangerously-skip-permissions"
           show_full_output: true
           prompt: ${{ steps.prompt.outputs.content }}
 
