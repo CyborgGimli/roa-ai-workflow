@@ -1,0 +1,52 @@
+🤖 CYBORG 🤖 2026-03-30T18:30:48,465 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-30T18:30:48,473 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-30T18:30:48,479 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-30T18:30:48,482 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [QUEST] - The quest: 'showsPreconditionsWithJourneyDataSetup(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2026-03-30T18:30:48,491 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Updated quest storage with credentials for username: eve.holt@reqres.in
+🤖 CYBORG 🤖 2026-03-30T18:30:48,501 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-03-30T18:30:48,522 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2026-03-30T18:30:48,527 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2026-03-30T18:30:48,536 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-03-30T18:30:48,797 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] STEP  [API] - Response with status: 200 received from endpoint: POST-https://reqres.in/api/login in 253ms.
+🤖 CYBORG 🤖 2026-03-30T18:30:48,811 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-03-30T18:30:48,817 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Response headers: Date=Mon, 30 Mar 2026 18:30:48 GMT
+🤖 CYBORG 🤖 2026-03-30T18:30:48,865 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [API] - Successfully authenticated user: eve.holt@reqres.in
+🤖 CYBORG 🤖 2026-03-30T18:30:48,996 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [QUEST] - Creating data for: USER_LEADER
+🤖 CYBORG 🤖 2026-03-30T18:30:49,003 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-03-30T18:30:49,017 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2026-03-30T18:30:49,020 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2026-03-30T18:30:49,023 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-03-30T18:30:49,418 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 391ms.
+🤖 CYBORG 🤖 2026-03-30T18:30:49,425 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-03-30T18:30:49,428 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Response headers: Date=Mon, 30 Mar 2026 18:30:49 GMT
+🤖 CYBORG 🤖 2026-03-30T18:30:49,434 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2026-03-30T18:30:49,437 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2026-03-30T18:30:49,439 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2026-03-30T18:30:49,559 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [QUEST] - Creating data for: USER_INTERMEDIATE
+🤖 CYBORG 🤖 2026-03-30T18:30:49,566 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-03-30T18:30:49,599 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2026-03-30T18:30:49,604 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2026-03-30T18:30:49,611 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-03-30T18:30:50,026 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 404ms.
+🤖 CYBORG 🤖 2026-03-30T18:30:50,031 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-03-30T18:30:50,034 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Response headers: Date=Mon, 30 Mar 2026 18:30:50 GMT
+🤖 CYBORG 🤖 2026-03-30T18:30:50,041 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2026-03-30T18:30:50,047 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2026-03-30T18:30:50,049 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2026-03-30T18:30:50,051 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-03-30T18:30:50,055 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2026-03-30T18:30:50,061 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [QUEST] - Fetching data from storage by key: 'POST_CREATE_USER' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2026-03-30T18:30:50,076 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2026-03-30T18:30:50,091 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2026-03-30T18:30:50,101 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] STEP  [API] - Sending request to endpoint DELETE-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2026-03-30T18:30:50,103 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2026-03-30T18:30:50,106 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-03-30T18:30:50,337 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] STEP  [API] - Response with status: 204 received from endpoint: DELETE-https://reqres.in/api/users/3 in 228ms.
+🤖 CYBORG 🤖 2026-03-30T18:30:50,342 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Response body: .
+🤖 CYBORG 🤖 2026-03-30T18:30:50,344 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Response headers: Date=Mon, 30 Mar 2026 18:30:50 GMT
+🤖 CYBORG 🤖 2026-03-30T18:30:50,348 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2026-03-30T18:30:50,350 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=204}]
+🤖 CYBORG 🤖 2026-03-30T18:30:50,353 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 204, Actual: 204)
+🤖 CYBORG 🤖 2026-03-30T18:30:50,356 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2026-03-30T18:30:50,358 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2026-03-30T18:30:50,365 [scenario=BasicToAdvancedEvolutionTest.showsPreconditionsWithJourneyDataSetup] INFO  [QUEST] - The quest of 'showsPreconditionsWithJourneyDataSetup(Quest)' has concluded with glory. Status: SUCCESS. Duration: 1 seconds.

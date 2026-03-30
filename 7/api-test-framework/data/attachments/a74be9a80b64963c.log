@@ -1,0 +1,19 @@
+🤖 CYBORG 🤖 2026-03-30T18:30:38,990 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-30T18:30:39,031 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-30T18:30:39,052 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-03-30T18:30:39,086 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] INFO  [QUEST] - The quest: 'showsBasicGetWithQueryParamAndMinimalAssertions(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2026-03-30T18:30:39,130 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-03-30T18:30:39,830 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2026-03-30T18:30:40,267 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2026-03-30T18:30:40,283 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2026-03-30T18:30:40,298 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-03-30T18:30:41,433 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 1111ms.
+🤖 CYBORG 🤖 2026-03-30T18:30:41,503 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-03-30T18:30:41,518 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] EXTENDED [API] - Response headers: Date=Mon, 30 Mar 2026 18:30:41 GMT
+🤖 CYBORG 🤖 2026-03-30T18:30:41,552 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2026-03-30T18:30:41,561 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200, Content-Type=application/json; charset=utf-8}]
+🤖 CYBORG 🤖 2026-03-30T18:30:41,577 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2026-03-30T18:30:41,668 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] VALIDATION [QUEST] - ✔ Validation passed: CONTAINS (Expected: application/json, Actual: application/json; charset=utf-8)
+🤖 CYBORG 🤖 2026-03-30T18:30:41,677 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2026-03-30T18:30:41,684 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2026-03-30T18:30:41,716 [scenario=GettingStartedTest.showsBasicGetWithQueryParamAndMinimalAssertions] INFO  [QUEST] - The quest of 'showsBasicGetWithQueryParamAndMinimalAssertions(Quest)' has concluded with glory. Status: SUCCESS. Duration: 2 seconds.
