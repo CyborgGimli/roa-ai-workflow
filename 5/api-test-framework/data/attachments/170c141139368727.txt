@@ -1,0 +1,19 @@
+{
+    "name": "Mr. Morpheus",
+    "job": "Intermediate Leader",
+    "id": "323",
+    "createdAt": "2026-03-30T17:59:31.257Z",
+    "_meta": {
+        "powered_by": "ReqRes",
+        "docs_url": "https://app.reqres.in/documentation",
+        "upgrade_url": "https://app.reqres.in/upgrade",
+        "example_url": "https://app.reqres.in/examples/notes-app",
+        "variant": "v1_a",
+        "message": "Classic ReqRes still works. Projects add persistence, auth, and logs.",
+        "cta": {
+            "label": "See example app",
+            "url": "https://app.reqres.in/examples/notes-app"
+        },
+        "context": "legacy_success"
+    }
+}
