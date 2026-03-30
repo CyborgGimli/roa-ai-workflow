@@ -187,11 +187,12 @@
 
         - name: Run Claude Code agent
           id: run_claude
+          continue-on-error: true
           uses: anthropics/claude-code-action@v1
           with:
             anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
             github_token: ${{ secrets.GITHUB_TOKEN }}
-            claude_args: "--max-turns 20 --model claude-haiku-4-5-20251001 --mcp-config ${{ github.workspace }}/mcp-config.json --dangerously-skip-permissions"
+            claude_args: "--max-turns 40 --model claude-haiku-4-5-20251001 --mcp-config ${{ github.workspace }}/mcp-config.json --dangerously-skip-permissions"
             show_full_output: true
             prompt: |
               The "API Tests" GitHub Actions workflow failed.
@@ -212,7 +213,7 @@
                  - inspect request parameters
                  - inspect response schemas
                  - inspect expected status codes
-              3) Do NOT use MCP for exploratory live API behavior unless absolutely necessary.
+              3) Do NOT use MCP for exploratory live API behavior unless absolutely necessary. If the MCP tool returns a 403 error, skip it and read specs/openapi.json directly instead.
               4) Fix ONLY test code / test-support code in this repository (do not change unrelated app code).
               5) Prefer minimal changes. Do not disable tests or reduce coverage to "make it green".
               6) Prefer contract-aligned fixes over brittle assertion changes.
