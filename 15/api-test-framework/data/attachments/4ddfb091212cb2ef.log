@@ -1,0 +1,7 @@
+Report-To={"group":"heroku-nel","endpoin🤖 CYBORG 🤖 2026-04-17T17:16:04,255 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 217ms.
+🤖 CYBORG 🤖 2026-04-17T17:16:04,269 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T17:16:04,274 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 17:16:04 GMT
+🤖 CYBORG 🤖 2026-04-17T17:16:04,283 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2026-04-17T17:16:04,289 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2026-04-17T17:16:04,298 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 409, Actual: 201)
+🤖 CYBORG 🤖 2026-04-17T17:16:04,325 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] INFO  [QUEST] - The quest of 'showsManualLifecycleWithExplicitLoginAndTokenHandling(Quest)' has ended in defeat. Status: FAILED. Duration: 0 seconds.
