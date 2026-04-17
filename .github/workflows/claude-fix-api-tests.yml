@@ -3,7 +3,7 @@ name: Claude Fix Failed API Tests
 permissions:
   contents: write
   pull-requests: write
-  actions: read
+  actions: write
 
 on:
   workflow_run:
@@ -26,7 +26,6 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 0
 
-      # 1) Download the FULL workflow run logs (zip) from the failed run
       - name: Download workflow run logs (zip)
         uses: actions/github-script@v7
         with:
@@ -34,13 +33,7 @@ jobs:
           script: |
             const run_id = context.payload.workflow_run.id;
             const { owner, repo } = context.repo;
-            
-            const res = await github.rest.actions.downloadWorkflowRunLogs({
-              owner,
-              repo,
-              run_id,
-            });
-            
+            const res = await github.rest.actions.downloadWorkflowRunLogs({ owner, repo, run_id });
             const fs = require("fs");
             fs.writeFileSync("failed-run-logs.zip", Buffer.from(res.data));
             core.info("Saved failed-run-logs.zip");
@@ -49,10 +42,7 @@ jobs:
         run: |
           mkdir -p failed-run-logs
           unzip -o failed-run-logs.zip -d failed-run-logs
-          echo "Unzipped workflow logs:"
-          find failed-run-logs -maxdepth 3 -type f | sort | head -n 200
 
-      # 2) Download artifacts produced by api-tests.yml (Allure report + allure-results)
       - name: Download Allure artifacts from failed run
         uses: actions/github-script@v7
         with:
@@ -60,53 +50,26 @@ jobs:
           script: |
             const run_id = context.payload.workflow_run.id;
             const { owner, repo } = context.repo;
-            
-            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-              owner,
-              repo,
-              run_id
-            });
-            
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({ owner, repo, run_id });
             const fs = require("fs");
             const path = require("path");
-            
             fs.mkdirSync("failed-run-artifacts", { recursive: true });
-            
-            // Prefer the merged final report if present, otherwise take all allure-results artifacts.
-            const preferred = [
-              "final-allure-report-api-test-framework",
-            ];
-            
-            const picked = [];
-            
-            for (const name of preferred) {
-              const found = artifacts.data.artifacts.find(a => a.name === name);
-              if (found) picked.push(found);
-            }
-            
+
+            const preferred = ["final-allure-report-api-test-framework"];
+            let picked = artifacts.data.artifacts.filter(a => preferred.includes(a.name));
             if (picked.length === 0) {
-              // Fallback: download all allure-related artifacts
-              for (const a of artifacts.data.artifacts) {
-                if (a.name.startsWith("allure-results-") || a.name.startsWith("final-allure-report")) {
-                  picked.push(a);
-                }
-              }
+              picked = artifacts.data.artifacts.filter(a =>
+                a.name.startsWith("allure-results-") || a.name.startsWith("final-allure-report")
+              );
             }
-            
-            core.info(`Artifacts total: ${artifacts.data.artifacts.length}`);
             core.info(`Artifacts selected: ${picked.map(a => a.name).join(", ") || "(none)"}`);
-            
+
             for (const artifact of picked) {
               const download = await github.rest.actions.downloadArtifact({
-                owner,
-                repo,
-                artifact_id: artifact.id,
-                archive_format: "zip",
+                owner, repo, artifact_id: artifact.id, archive_format: "zip",
               });
-            
               const out = path.join("failed-run-artifacts", `${artifact.name}.zip`);
               fs.writeFileSync(out, Buffer.from(download.data));
-              core.info(`Downloaded ${artifact.name} -> ${out}`);
             }
 
       - name: Unzip artifacts
@@ -116,8 +79,6 @@ jobs:
           for f in failed-run-artifacts/*.zip; do
             unzip -o "$f" -d failed-run-artifacts/unzipped
           done
-          echo "Artifacts extracted:"
-          find failed-run-artifacts/unzipped -maxdepth 4 -type f | sort | head -n 200
 
       - name: Build failure summary for Claude
         run: |
@@ -130,8 +91,7 @@ jobs:
               | grep -v "^Binary" \
               | head -n 100
           } > claude-context/failure-summary.txt
-          
-          echo "Wrote claude-context/failure-summary.txt ($(wc -l < claude-context/failure-summary.txt) lines)"
+          echo "Wrote failure-summary.txt ($(wc -l < claude-context/failure-summary.txt) lines)"
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -139,7 +99,6 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      # Make Maven runnable — local repo inside workspace so Claude can compile/test
       - name: Prepare local Maven repo inside workspace
         run: mkdir -p .m2/repository
 
@@ -196,48 +155,45 @@ jobs:
           show_full_output: true
           prompt: |
             The "API Tests" GitHub Actions workflow failed.
-            
+
             You have access to:
             - Full workflow logs under: failed-run-logs/
             - Allure report / results under: failed-run-artifacts/unzipped/
             - The repository checkout at the failing SHA
             - A local OpenAPI spec at: specs/openapi.json
             - An MCP server named: reqres_openapi
-            
-            Start by reading `claude-context/failure-summary.txt`. Only open other logs/artifacts if the summary is insufficient to identify the failing test(s) and root cause.
-            
+
+            Start by reading `claude-context/failure-summary.txt`. Only open other logs/artifacts if the summary is insufficient.
+
             Task:
             1) Identify the failing API test(s) and root cause using logs + Allure artifacts.
-            2) Use the MCP server ONLY for contract lookup:
-               - inspect endpoints
-               - inspect request parameters
-               - inspect response schemas
-               - inspect expected status codes
-            3) Do NOT use MCP for exploratory live API behavior unless absolutely necessary.
-            4) Fix ONLY test code / test-support code in this repository (do not change unrelated app code).
-            5) Prefer minimal changes. Do not disable tests or reduce coverage to "make it green".
-            6) Prefer contract-aligned fixes over brittle assertion changes.
-            7) After changes, run the Iteration loop (MUST follow):
+            2) Use the MCP server ONLY for contract lookup (endpoints, parameters, response schemas, status codes).
+               If MCP returns 403, read specs/openapi.json directly instead.
+            3) Fix ONLY test code / test-support code. Do not change unrelated app code.
+            4) Prefer minimal changes. Do not disable tests or reduce coverage to make it green.
+            5) Prefer contract-aligned fixes over brittle assertion changes.
+            6) After changes, run the Iteration loop (MUST follow):
                - Run: mvn -U -pl api-test-framework -am test -Dmaven.repo.local=$GITHUB_WORKSPACE/.m2/repository
                - If tests fail due to code/test reasons: apply the minimal fix, then rerun the same command.
-               - Keep iterating until ALL tests pass. Do not stop early. Only stop if:
+               - Keep iterating until ALL tests pass. Only stop if:
                  a) All tests pass — done, OR
-                 b) You have made 10 fix attempts and tests still fail — summarize why it cannot be fixed safely, OR
-                 c) The failure is environmental (cannot resolve repo.maven.apache.org / network/DNS) — retry 3 times; if still failing, report "environmental – cannot validate".
-            8) When tests pass, print this block to the console (do NOT write any files):
-               === FIX SUMMARY ===
-               Root cause: <one line>
-               Files changed: <list>
+                 b) 10 fix attempts exhausted — summarize why it cannot be fixed safely, OR
+                 c) Environmental failure (network/DNS) — retry 3 times then report "environmental – cannot validate".
+            7) When all tests pass, write EXACTLY the following block to `.claude-temp-results`:
+               **Root cause:** <one-line description>
+               **Files changed:** <comma-separated list>
+
                ✔ <TestMethodName> — SUCCESS
-               ...
+               ✔ <TestMethodName> — SUCCESS
+
                Tests run: N, Failures: 0, Errors: 0, Skipped: 0
                BUILD SUCCESS
 
             Notes:
-            - This is Java + Maven API automation using the ROA framework.
-            - Focus on broken assertions, outdated contract expectations, data setup, and contract mismatches.
+            - Java + Maven API automation using the ROA framework.
+            - Focus on broken assertions, outdated contract expectations, data setup, contract mismatches.
             - Follow all CLAUDE.md instructions present in the repository.
-            - Do NOT create any output files (no claude-output.md or similar). Print to console only.
+            - Do NOT create any other files. Only write `.claude-temp-results` as instructed above.
 
       - name: Show diff and detect changes
         id: changes
@@ -251,7 +207,22 @@ jobs:
             echo "No changes detected — skipping PR creation."
           fi
 
+      - name: Read Claude test summary
+        id: summary
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          if [ -f ".claude-temp-results" ]; then
+            {
+              echo 'content<<SUMMARY_EOF'
+              cat .claude-temp-results
+              echo 'SUMMARY_EOF'
+            } >> $GITHUB_OUTPUT
+          else
+            echo 'content=No test summary available.' >> $GITHUB_OUTPUT
+          fi
+
       - name: Create PR with Claude fix
+        id: create_pr
         if: steps.changes.outputs.has_changes == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
@@ -263,8 +234,12 @@ jobs:
           body: |
             Automated PR generated by Claude Code after a failed **API Tests** workflow run.
 
-            - Run: ${{ github.event.workflow_run.html_url }}
+            - Failed run: ${{ github.event.workflow_run.html_url }}
             - SHA: ${{ github.event.workflow_run.head_sha }}
+
+            ---
+
+            ${{ steps.summary.outputs.content }}
           add-paths: |
             api-test-framework
 
@@ -286,7 +261,6 @@ jobs:
               inputs: { tagsInclude: 'Regression', tagsExclude: 'Flaky' },
             });
 
-            // Wait for GitHub to register the new run
             await new Promise(r => setTimeout(r, 15000));
 
             const runs = await github.rest.actions.listWorkflowRuns({
@@ -297,7 +271,7 @@ jobs:
             });
 
             const run = runs.data.workflow_runs[0];
-            if (!run) { core.setFailed('Dispatched run not found after 15 s.'); return; }
+            if (!run) { core.setFailed('Dispatched run not found after 15s.'); return; }
 
             core.info(`Run found: ${run.html_url} (${run.status})`);
             core.setOutput('run_id', String(run.id));
