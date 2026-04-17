@@ -1,0 +1,7 @@
+Etag=W/"5f7-gJiYqcwcxD7jRj00🤖 CYBORG 🤖 2026-04-17T17:42:54,409 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 288ms.
+🤖 CYBORG 🤖 2026-04-17T17:42:54,433 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T17:42:54,443 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 17:42:54 GMT
+🤖 CYBORG 🤖 2026-04-17T17:42:54,474 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2026-04-17T17:42:54,479 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2026-04-17T17:42:54,489 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 409, Actual: 201)
+🤖 CYBORG 🤖 2026-04-17T17:42:54,539 [scenario=BasicToAdvancedEvolutionTest.showsManualLifecycleWithExplicitLoginAndTokenHandling] INFO  [QUEST] - The quest of 'showsManualLifecycleWithExplicitLoginAndTokenHandling(Quest)' has ended in defeat. Status: FAILED. Duration: 0 seconds.
