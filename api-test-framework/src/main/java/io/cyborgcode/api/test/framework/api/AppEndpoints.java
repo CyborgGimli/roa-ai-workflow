@@ -25,6 +25,7 @@ public enum AppEndpoints implements Endpoint<AppEndpoints> {
    GET_ALL_USERS(Method.GET, "/users"),
    GET_USER(Method.GET, "/users/{id}"),
    POST_CREATE_USER(Method.POST, "/users"),
+   PUT_UPDATE_USER(Method.PUT, "/users/{id}"),
    POST_LOGIN_USER(Method.POST, "/login"),
    DELETE_USER(Method.DELETE, "/users/{id}");
 
