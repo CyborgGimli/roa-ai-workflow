@@ -1,0 +1,16 @@
+🤖 CYBORG 🤖 2026-04-17T13:38:28,243 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:28,246 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:28,248 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:28,253 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] INFO  [QUEST] - The quest: 'showsRequestThenValidateWithPlainJUnitAssertions(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2026-04-17T13:38:28,256 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-04-17T13:38:28,265 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2026-04-17T13:38:28,272 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2026-04-17T13:38:28,279 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2026-04-17T13:38:28,287 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-04-17T13:38:28,376 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 82ms.
+🤖 CYBORG 🤖 2026-04-17T13:38:28,384 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:28,391 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 13:38:28 GMT
+🤖 CYBORG 🤖 2026-04-17T13:38:28,399 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2026-04-17T13:38:28,405 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] EXTENDED [QUEST] - Fetching data from storage by key: 'GET_ALL_USERS' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2026-04-17T13:38:28,422 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2026-04-17T13:38:28,431 [scenario=AdvancedExamplesTest.showsRequestThenValidateWithPlainJUnitAssertions] INFO  [QUEST] - The quest of 'showsRequestThenValidateWithPlainJUnitAssertions(Quest)' has concluded with glory. Status: SUCCESS. Duration: 0 seconds.

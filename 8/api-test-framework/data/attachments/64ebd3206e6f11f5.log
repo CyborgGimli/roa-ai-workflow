@@ -1,0 +1,55 @@
+🤖 CYBORG 🤖 2026-04-17T13:38:20,679 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:20,734 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:20,740 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:20,750 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [QUEST] - The quest: 'showsJourneySetupWithRipperCleanup(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2026-04-17T13:38:20,756 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Updated quest storage with credentials for username: eve.holt@reqres.in
+🤖 CYBORG 🤖 2026-04-17T13:38:20,762 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-04-17T13:38:21,390 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2026-04-17T13:38:21,408 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:21,428 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-04-17T13:38:22,300 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] STEP  [API] - Response with status: 200 received from endpoint: POST-https://reqres.in/api/login in 859ms.
+🤖 CYBORG 🤖 2026-04-17T13:38:22,310 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:22,314 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 13:38:22 GMT
+🤖 CYBORG 🤖 2026-04-17T13:38:22,729 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [API] - Successfully authenticated user: eve.holt@reqres.in
+🤖 CYBORG 🤖 2026-04-17T13:38:22,891 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [QUEST] - Creating data for: USER_LEADER
+🤖 CYBORG 🤖 2026-04-17T13:38:22,947 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-04-17T13:38:22,964 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2026-04-17T13:38:22,972 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:22,977 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-04-17T13:38:23,208 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 223ms.
+🤖 CYBORG 🤖 2026-04-17T13:38:23,213 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:23,216 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 13:38:23 GMT
+🤖 CYBORG 🤖 2026-04-17T13:38:23,221 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2026-04-17T13:38:23,224 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2026-04-17T13:38:23,228 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2026-04-17T13:38:23,304 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [QUEST] - Creating data for: USER_INTERMEDIATE
+🤖 CYBORG 🤖 2026-04-17T13:38:23,310 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-04-17T13:38:23,318 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2026-04-17T13:38:23,321 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:23,324 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-04-17T13:38:23,490 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 163ms.
+🤖 CYBORG 🤖 2026-04-17T13:38:23,494 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:23,496 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 13:38:23 GMT
+🤖 CYBORG 🤖 2026-04-17T13:38:23,501 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2026-04-17T13:38:23,503 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=201}]
+🤖 CYBORG 🤖 2026-04-17T13:38:23,508 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 201, Actual: 201)
+🤖 CYBORG 🤖 2026-04-17T13:38:23,512 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-04-17T13:38:23,514 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] VALIDATION [QUEST] - Starting hard validation...
+🤖 CYBORG 🤖 2026-04-17T13:38:23,519 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [QUEST] - Fetching data from storage by key: 'POST_CREATE_USER' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2026-04-17T13:38:23,568 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] VALIDATION [QUEST] - Hard validation completed successfully.
+🤖 CYBORG 🤖 2026-04-17T13:38:23,571 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2026-04-17T13:38:23,579 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2026-04-17T13:38:23,592 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [QUEST] - The ripper has arrived
+🤖 CYBORG 🤖 2026-04-17T13:38:23,647 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-04-17T13:38:23,652 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2026-04-17T13:38:23,656 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] STEP  [API] - Sending request to endpoint DELETE-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2026-04-17T13:38:23,658 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2026-04-17T13:38:23,660 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-04-17T13:38:23,996 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] STEP  [API] - Response with status: 204 received from endpoint: DELETE-https://reqres.in/api/users/3 in 332ms.
+🤖 CYBORG 🤖 2026-04-17T13:38:23,999 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Response body: .
+🤖 CYBORG 🤖 2026-04-17T13:38:24,001 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 13:38:23 GMT
+🤖 CYBORG 🤖 2026-04-17T13:38:24,005 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2026-04-17T13:38:24,008 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=204}]
+🤖 CYBORG 🤖 2026-04-17T13:38:24,011 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 204, Actual: 204)
+🤖 CYBORG 🤖 2026-04-17T13:38:24,014 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [QUEST] - DataRipper processed target: 'DELETE_ADMIN_USER'.
+🤖 CYBORG 🤖 2026-04-17T13:38:24,022 [scenario=BasicToAdvancedEvolutionTest.showsJourneySetupWithRipperCleanup] INFO  [QUEST] - The quest of 'showsJourneySetupWithRipperCleanup(Quest)' has concluded with glory. Status: SUCCESS. Duration: 3 seconds.

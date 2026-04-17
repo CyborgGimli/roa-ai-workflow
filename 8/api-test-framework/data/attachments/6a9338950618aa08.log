@@ -1,0 +1,37 @@
+🤖 CYBORG 🤖 2026-04-17T13:38:24,277 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:24,412 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:24,442 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:24,476 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [QUEST] - The quest: 'showsSwitchingRingsForLoginThenApiCall(Quest, LoginDto)' has begun and is crafted.
+🤖 CYBORG 🤖 2026-04-17T13:38:24,675 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [QUEST] - The quest has used the ring: 'Ring of Custom'
+🤖 CYBORG 🤖 2026-04-17T13:38:24,686 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-04-17T13:38:25,335 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖 CYBORG 🤖 2026-04-17T13:38:25,349 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:25,363 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-04-17T13:38:26,276 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] STEP  [API] - Response with status: 200 received from endpoint: POST-https://reqres.in/api/login in 901ms.
+🤖 CYBORG 🤖 2026-04-17T13:38:26,293 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:26,302 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 13:38:26 GMT
+🤖 CYBORG 🤖 2026-04-17T13:38:26,875 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {ExampleHeader=[QpwL5tke4Pnpja7X4]}
+🤖 CYBORG 🤖 2026-04-17T13:38:26,887 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2026-04-17T13:38:26,893 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2026-04-17T13:38:26,899 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-04-17T13:38:27,177 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users/3 in 268ms.
+🤖 CYBORG 🤖 2026-04-17T13:38:27,190 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:27,197 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 13:38:27 GMT
+🤖 CYBORG 🤖 2026-04-17T13:38:27,218 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2026-04-17T13:38:27,224 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2026-04-17T13:38:27,235 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2026-04-17T13:38:27,239 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2026-04-17T13:38:27,247 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-04-17T13:38:27,265 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2026-04-17T13:38:27,278 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2026-04-17T13:38:27,284 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2026-04-17T13:38:27,290 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-04-17T13:38:27,380 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users?page=2 in 82ms.
+🤖 CYBORG 🤖 2026-04-17T13:38:27,402 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:27,412 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 13:38:27 GMT
+🤖 CYBORG 🤖 2026-04-17T13:38:27,426 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2026-04-17T13:38:27,430 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2026-04-17T13:38:27,434 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2026-04-17T13:38:27,437 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2026-04-17T13:38:27,440 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2026-04-17T13:38:27,447 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [QUEST] - The quest of 'showsSwitchingRingsForLoginThenApiCall(Quest, LoginDto)' has concluded with glory. Status: SUCCESS. Duration: 3 seconds.

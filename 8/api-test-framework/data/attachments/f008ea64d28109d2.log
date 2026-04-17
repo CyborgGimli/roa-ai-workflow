@@ -1,0 +1,19 @@
+🤖 CYBORG 🤖 2026-04-17T13:38:21,274 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:21,326 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:21,332 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] EXTENDED [QUEST] - Service: 'io.cyborgcode.roa.framework.chain.FluentServiceDecorator' has been registered for the quest
+🤖 CYBORG 🤖 2026-04-17T13:38:21,338 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] INFO  [QUEST] - The quest: 'showsGetWithPathParamAndJsonPathValidation(Quest)' has begun and is crafted.
+🤖 CYBORG 🤖 2026-04-17T13:38:21,346 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-04-17T13:38:21,537 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] INFO  [API] - Prepared RequestSpecification with pathParams: {id=3}, queryParams: {}, headers: {}
+🤖 CYBORG 🤖 2026-04-17T13:38:21,884 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users/3.
+🤖 CYBORG 🤖 2026-04-17T13:38:21,900 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2026-04-17T13:38:21,917 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-04-17T13:38:22,978 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] STEP  [API] - Response with status: 200 received from endpoint: GET-https://reqres.in/api/users/3 in 1043ms.
+🤖 CYBORG 🤖 2026-04-17T13:38:22,990 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T13:38:22,996 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 13:38:22 GMT
+🤖 CYBORG 🤖 2026-04-17T13:38:23,014 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] INFO  [API] - Starting response validation with 2 assertion(s).
+🤖 CYBORG 🤖 2026-04-17T13:38:23,475 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] EXTENDED [API] - Validation target: [{data.email=emma.wong@reqres.in, AssertionKeyForStatus=200}]
+🤖 CYBORG 🤖 2026-04-17T13:38:23,479 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: 200, Actual: 200)
+🤖 CYBORG 🤖 2026-04-17T13:38:23,487 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] VALIDATION [QUEST] - ✔ Validation passed: IS (Expected: emma.wong@reqres.in, Actual: emma.wong@reqres.in)
+🤖 CYBORG 🤖 2026-04-17T13:38:23,492 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] INFO  [QUEST] - The quest has dropped the ring.
+🤖 CYBORG 🤖 2026-04-17T13:38:23,495 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] INFO  [QUEST] - The quest has reached his end
+🤖 CYBORG 🤖 2026-04-17T13:38:23,508 [scenario=GettingStartedTest.showsGetWithPathParamAndJsonPathValidation] INFO  [QUEST] - The quest of 'showsGetWithPathParamAndJsonPathValidation(Quest)' has concluded with glory. Status: SUCCESS. Duration: 2 seconds.
