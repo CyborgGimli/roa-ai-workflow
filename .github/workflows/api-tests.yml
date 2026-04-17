@@ -31,8 +31,9 @@ jobs:
       project_module: api-test-framework
       tags_include: ${{ github.event.inputs.tagsInclude || 'Regression' }}
       tags_exclude: ${{ github.event.inputs.tagsExclude || 'Flaky' }}
-      mvn_extra_split_args: >-
-        -DtestSplitter.classes.include=${{ github.event.inputs.tests || 'BasicToAdvancedEvolutionTest,AdvancedExamplesTest' }}
+      max_runners: 1
+      mvn_extra_test_args: >-
+        -Dtest=${{ github.event.inputs.tests || 'BasicToAdvancedEvolutionTest,AdvancedExamplesTest' }}
     secrets:
       maven_user:  ${{ secrets.GH_PACKAGES_USER }}
       maven_token: ${{ secrets.GH_PACKAGES_PAT }}
