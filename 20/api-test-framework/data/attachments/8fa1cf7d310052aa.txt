@@ -1,0 +1,4 @@
+Accept=application/json, application/javascript, text/javascript, text/json
+Content-Type=application/json
+x-api-key=pro_95fe84bb7f35b085354ed1c1139282e7559d976235a63edb19f378a6ffe56079
+Authorization=Bearer QpwL5tke4Pnpja7X4
