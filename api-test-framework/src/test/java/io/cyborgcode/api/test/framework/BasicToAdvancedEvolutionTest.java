@@ -45,8 +45,7 @@ import static io.cyborgcode.roa.api.validator.RestAssertionTarget.STATUS;
 import static io.cyborgcode.roa.validator.core.AssertionTypes.IS;
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
-import static org.apache.http.HttpStatus.SC_CREATED;
-import static org.apache.http.HttpStatus.SC_NO_CONTENT;
+import static org.apache.http.HttpStatus.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -86,12 +85,12 @@ class BasicToAdvancedEvolutionTest extends BaseQuest {
             .requestAndValidate(
                   POST_CREATE_USER.withHeader(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token),
                   leaderUser,
-                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CONFLICT).build()
             )
             .requestAndValidate(
                   POST_CREATE_USER.withHeader(AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_VALUE + token),
                   intermediateUser,
-                  Assertion.builder().target(STATUS).type(IS).expected(SC_CREATED).build()
+                  Assertion.builder().target(STATUS).type(IS).expected(SC_CONFLICT).build()
             )
             .validate(() -> {
                CreatedUserDto createdUser = retrieve(StorageKeysApi.API, POST_CREATE_USER, Response.class)
