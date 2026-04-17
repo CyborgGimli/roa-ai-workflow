@@ -59,7 +59,7 @@ public class TestConstants {
       }
 
       public static final String SUPPORT_URL_REQRES_FRAGMENT = "reqres";
-      public static final String SUPPORT_TEXT_PREFIX = "Tired of writing";
+      public static final String SUPPORT_TEXT_PREFIX = "Tired of writing!";
       public static final String SUPPORT_URL_REGEX =
             "https:\\/\\/contentcaddy\\.io\\?utm_source=reqres&utm_medium=json&utm_campaign=referral";
    }
