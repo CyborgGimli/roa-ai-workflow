@@ -1,0 +1,40 @@
+Date=Fri, 17 Apr 2026 14:13:09 GMT
+Content-Type=application/json; charset=utf-8
+Content-Length=490
+Connection=keep-alive
+Access-Control-Allow-Origin=*
+Cache-Control=no-store
+Cross-Origin-Opener-Policy=same-origin
+Cross-Origin-Resource-Policy=same-origin
+Etag=W/"1ea-pl4N7NUNyZfBcLvDlwvZETf4ky8"
+Nel={"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}
+Origin-Agent-Cluster=?1
+Ratelimit-Limit=20
+Ratelimit-Policy=20;w=60
+Ratelimit-Remaining=19
+Ratelimit-Reset=60
+Referrer-Policy=strict-origin-when-cross-origin
+Report-To={"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=U6LkvieYFPP4NZ0xggK9uPLubHNv2BJjwL9irRnS91Q%3D\u0026sid=c4c9725f-1ab0-44d8-820f-430df2718e11\u0026ts=1776435189"}],"max_age":3600}
+Reporting-Endpoints=heroku-nel="https://nel.heroku.com/reports?s=U6LkvieYFPP4NZ0xggK9uPLubHNv2BJjwL9irRnS91Q%3D&sid=c4c9725f-1ab0-44d8-820f-430df2718e11&ts=1776435189"
+Server=cloudflare
+Strict-Transport-Security=max-age=31536000; includeSubDomains
+Via=1.1 heroku-router
+X-Content-Type-Options=nosniff
+X-Dns-Prefetch-Control=off
+X-Download-Options=noopen
+X-Frame-Options=DENY
+X-Permitted-Cross-Domain-Policies=none
+X-Powered-By=ReqRes.in - Deploy backends in 30 seconds
+X-Ratelimit-Limit=250
+X-Ratelimit-Remaining=148
+X-Ratelimit-Reset=1776470400
+X-Reqres-Docs=https://reqres.in
+X-Reqres-Message=This API is powered by ReqRes. Deploy your own backend in 30 seconds!
+X-Reqres-Templates=https://app.reqres.in/templates
+X-Reqres-Tip=Add real user auth to your app with magic codes - reqres.in/docs
+X-Reqres-Upgrade=https://app.reqres.in/upgrade
+X-Request-Id=bbdb6b50-aa83-f51a-e4dc-d5280a4570f2
+X-Robots-Tag=noindex, nofollow
+X-Xss-Protection=0
+cf-cache-status=DYNAMIC
+CF-RAY=9edc075f6da4eb62-ORD
