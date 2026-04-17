@@ -1,0 +1,7 @@
+🤖 CYBORG 🤖 2026-04-17T17:37:12,046 [scenario=AdvancedExamplesTest.showsMixOfCraftAndLateCraftInChainedFlow] STEP  [API] - Sending req🤖 CYBORG 🤖 2026-04-17T17:37:12,416 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/login.
+🤖🤖 CYBORG 🤖 2026-04-17T17:37:13,432 [scenario=AdvancedExamplesTest.showsMixOfCraftAndLateCraftInChainedFlow] STEP  [API] - Response with status: 201 received from endpoint: POST-https://reqres.in/api/users in 1334ms.
+🤖 CYBORG 🤖 2026-04-17T17:37:15,388 [scenario=AdvancedExamplesTest.showsMixOfCraftAndLateCraftInChainedFlow] STEP  [API] - Response with status: 429 received from endpoint: POST-https://reqres.in/api/users in 365ms.
+🤖 CYBORG 🤖 2026-04-17T17:37:15,394 [scenario=AdvancedExamplesTest.showsMixOfCraftAndLateCraftInChainedFlow] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T17:37:15,404 [scenario=AdvancedExamplesTest.showsMixOfCraftAndLateCraftInChainedFlow] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 17:37:15 GMT
+🤖 CYBORG 🤖 2026-04-17T17:37:15,413 [scenario=AdvancedExamplesTest.showsMixOfCraftAndLateCraftInChainedFlow] INFO  [API] - Starting response validation with 3 assertion(s).
+🤖 CYBORG 🤖 2026-04-17T17:37:15,448 [scenario=AdvancedExamplesTest.showsMixOfCraftAndLateCraftInChainedFlow] INFO  [QUEST] - The quest of 'showsMixOfCraftAndLateCraftInChainedFlow(Quest, CreateUserDto, Late)' has ended in defeat. Status: FAILED. Duration: 5 seconds.
