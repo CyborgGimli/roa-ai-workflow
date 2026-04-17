@@ -1,0 +1,5 @@
+🤖 CYBORG 🤖 2026-04-17T17:23:39,034 [scenario=AdvancedExamplesTest.showsTokenReuseFromStorageAcrossRequests] STEP  [API] - Response with status: 429 received from endpoint: POST-https://reqres.in/api/login in 201ms.
+🤖 CYBORG 🤖 2026-04-17T17:23:39,052 [scenario=AdvancedExamplesTest.showsTokenReuseFromStorageAcrossRequests] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T17:23:39,059 [scenario=AdvancedExamplesTest.showsTokenReuseFromStorageAcrossRequests] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 17:23:39 GMT
+🤖 CYBORG 🤖 2026-04-17T17:23:39,071 [scenario=AdvancedExamplesTest.showsTokenReuseFromStorageAcrossRequests] EXTENDED [QUEST] - Fetching data from storage by key: 'POST_LOGIN_USER' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2026-04-17T17:23:39,118 [scenario=AdvancedExamplesTest.showsTokenReuseFromStorageAcrossRequests] INFO  [QUEST] - The quest of 'showsTokenReuseFromStorageAcrossRequests(Quest, LoginDto)' has ended in defeat. Status: FAILED. Duration: 0 seconds.

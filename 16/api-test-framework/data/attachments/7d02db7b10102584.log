@@ -1,0 +1,2 @@
+🤖 CYBORG 🤖 2026-04-17T17:23:39,191 [scenario=AdvancedExamplesTest.showsLateCraftModelMaterializedOnDemand] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 200, Actual: 429)
+🤖 CYBORG 🤖 2026-04-17T17:23:39,406 [scenario=AdvancedExamplesTest.showsLateCraftModelMaterializedOnDemand] INFO  [QUEST] - The quest of 'showsLateCraftModelMaterializedOnDemand(Quest, Late)' has ended in defeat. Status: FAILED. Duration: 0 seconds.

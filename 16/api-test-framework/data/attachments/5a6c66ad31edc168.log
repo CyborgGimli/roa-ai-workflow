@@ -1,0 +1,12 @@
+🤖 CYBORG 🤖 2026-04-17T17:23:37,620 [scenario=AdvancedExamplesTest.showsSoftAssertionsAfterFindingUserByFirstNameFromStorage] INFO  [QUEST] - The q🤖 CYBORG 🤖 2026-04-17T17:23:38,085 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] INFO  [API] - Successfully authenticated user: eve.holt@reqres.in
+🤖 CYBORG 🤖 2026-04-17T17:23:38,104 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-04-17T17:23:38,240 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] STEP  [API] - Sending request to endpoint POST-https://reqres.in/api/users.
+🤖 CYBORG 🤖 2026-04-17T17:23:38,254 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] EXTENDED [API] - Request body: {
+🤖 CYBORG 🤖 2026-04-17T17:23:38,280 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-04-17T17:23:38,524 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] STEP  [API] - Response with status: 429 received from endpoint: POST-https://reqres.in/api/users in 230ms.
+🤖 CYBORG 🤖 2026-04-17T17:23:38,548 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T17:23:38,561 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 17:23:38 GMT
+🤖 CYBORG 🤖 2026-04-17T17:23:38,580 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] INFO  [API] - Starting response validation with 1 assertion(s).
+🤖 CYBORG 🤖 2026-04-17T17:23:38,588 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] EXTENDED [API] - Validation target: [{AssertionKeyForStatus=429}]
+🤖 CYBORG 🤖 2026-04-17T17:23:38,610 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] VALIDATION [QUEST] - ✘ Validation failed: IS (Expected: 201, Actual: 429)
+🤖 CYBORG 🤖 2026-04-17T17:23:38,771 [scenario=BasicToAdvancedEvolutionTest.showsApiLevelAuthenticationWithAuthenticateViaApi] INFO  [QUEST] - The quest of 'showsApiLevelAuthenticationWithAuthenticateViaApi(Quest)' has ended in defeat. Status: FAILED. Duration: 4 seconds.

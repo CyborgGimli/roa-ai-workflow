@@ -1,0 +1,5 @@
+🤖 CYBORG 🤖 2026-04-17T17:23:38,888 [scenario=BasicToAdvancedEvolutionTest.showsEnc🤖 CYBORG 🤖 2026-04-17T17:23:38,944 [scenario=AdvancedExamplesTest.showsChainedRequestsAndUsingStorage] STEP  [API] - Response with status: 429 received from endpoint: GET-https://reqres.in/api/users?page=2 in 192ms.
+🤖 CYBORG 🤖 2026-04-17T17:23:38,960 [scenario=AdvancedExamplesTest.showsChainedRequestsAndUsingStorage] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T17:23:38,975 [scenario=AdvancedExamplesTest.showsChainedRequestsAndUsingStorage] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 17:23:38 GMT
+🤖 CYBORG 🤖 2026-04-17T17:23:38,996 [scenario=AdvancedExamplesTest.showsChainedRequestsAndUsingStorage] EXTENDED [QUEST] - Fetching data from storage by key: 'GET_ALL_USERS' and type: 'io.restassured.response.Response'
+🤖 CYBORG 🤖 2026-04-17T17:23:39,055 [scenario=AdvancedExamplesTest.showsChainedRequestsAndUsingStorage] INFO  [QUEST] - The quest of 'showsChainedRequestsAndUsingStorage(Quest)' has ended in defeat. Status: FAILED. Duration: 0 seconds.

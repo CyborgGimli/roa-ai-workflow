@@ -1,0 +1,4 @@
+🤖 CYBORG 🤖 2026-04-17T17:23:38,182 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [QUEST] - The quest has used the ring: 'Ring of Custom'
+🤖 CYBORG 🤖 2026-04-17T17:23:38,209 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [QUEST] - The quest has used the ring: 'API'
+Content-Type=application/jso🤖 CYBORG 🤖 2026-04-17T17:23:41,129 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] STEP  [API] - Response with status: 429 received from endpoint: POST-https://reqres.in/api/login in 1588ms.
+🤖 CYBORG 🤖 2026-04-17T17:23:42,108 [scenario=AdvancedExamplesTest.showsSwitchingRingsForLoginThenApiCall] INFO  [QUEST] - The quest of 'showsSwitchingRingsForLoginThenApiCall(Quest, LoginDto)' has ended in defeat. Status: FAILED. Duration: 4 seconds.
