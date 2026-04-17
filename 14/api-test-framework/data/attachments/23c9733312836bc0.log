@@ -1,0 +1,3 @@
+🤖 CYBORG 🤖 2026-04-17T15:50:28,844 [scenario=AdvancedExamplesTest.showsMixOfCraftAndLateCraftInChainedFlow] INFO  [QUEST] - The quest has used the ring: 'API'
+🤖 CYBORG 🤖 2026-04-17T15:50:31,660 [scenario=AdvancedExamplesTest.showsMixOfCraftAndLateCraftInChainedFlow] STEP  [API] - Response with status: 429 received from endpoint: POST-https://reqres.in/api/users in 1544ms.
+🤖 CYBORG 🤖 2026-04-17T15:50:32,588 [scenario=AdvancedExamplesTest.showsMixOfCraftAndLateCraftInChainedFlow] INFO  [QUEST] - The quest of 'showsMixOfCraftAndLateCraftInChainedFlow(Quest, CreateUserDto, Late)' has ended in defeat. Status: FAILED. Duration: 4 seconds.

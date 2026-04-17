@@ -1,0 +1,9 @@
+🤖 CYBORG 🤖 2026-04-17T15:50:32,346 [scenario=AdvancedExamplesTest.showsComprehensiveAssertionsOnUsersList] INFO  [API] - Prepared RequestSpecification with pathParams: {}, queryParams: {page=2}, headers: {}
+🤖 CYBORG 🤖 2026-04-17T15:50:32,363 [scenario=AdvancedExamplesTest.showsComprehensiveAssertionsOnUsersList] STEP  [API] - Sending request to endpoint GET-https://reqres.in/api/users?page=2.
+🤖 CYBORG 🤖 2026-04-17T15:50:32,369 [scenario=AdvancedExamplesTest.showsComprehensiveAssertionsOnUsersList] EXTENDED [API] - Request body: .
+🤖 CYBORG 🤖 2026-04-17T15:50:32,375 [scenario=AdvancedExamplesTest.showsComprehensiveAssertionsOnUsersList] EXTENDED [API] - Request headers: Accept=application/json, application/javascript, text/javascript, text/json
+🤖 CYBORG 🤖 2026-04-17T15:50:32,667 [scenario=AdvancedExamplesTest.showsComprehensiveAssertionsOnUsersList] STEP  [API] - Response with status: 429 received from endpoint: GET-https://reqres.in/api/users?page=2 in 285ms.
+🤖 CYBORG 🤖 2026-04-17T15:50:32,677 [scenario=AdvancedExamplesTest.showsComprehensiveAssertionsOnUsersList] EXTENDED [API] - Response body: {
+🤖 CYBORG 🤖 2026-04-17T15:50:32,691 [scenario=AdvancedExamplesTest.showsComprehensiveAssertionsOnUsersList] EXTENDED [API] - Response headers: Date=Fri, 17 Apr 2026 15:50:32 GMT
+🤖 CYBORG 🤖 2026-04-17T15:50:32,713 [scenario=AdvancedExamplesTest.showsComprehensiveAssertionsOnUsersList] INFO  [API] - Starting response validation with 18 assertion(s).
+🤖 CYBORG 🤖 2026-04-17T15:50:32,813 [scenario=AdvancedExamplesTest.showsComprehensiveAssertionsOnUsersList] INFO  [QUEST] - The quest of 'showsComprehensiveAssertionsOnUsersList(Quest)' has ended in defeat. Status: FAILED. Duration: 0 seconds.
