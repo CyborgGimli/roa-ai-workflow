@@ -1,0 +1,36 @@
+{
+    "error": "rate_limit_exceeded",
+    "message": "You've hit the free-tier limit of 250 requests/day.",
+    "upgrade": {
+        "message": "Lite ($5/mo): 1,000 requests/day. Dev ($12/mo): 5,000/day + collections, app users, and 7-day logs.",
+        "url": "https://app.reqres.in/upgrade?source=rate_limit&endpoint=legacy_api",
+        "pricing_url": "https://app.reqres.in/upgrade?source=rate_limit&highlight=dev"
+    },
+    "current_usage": {
+        "requests_today": 250,
+        "daily_limit": 250,
+        "resets_at": "2026-04-18T00:00:00.000Z"
+    },
+    "limit": 250,
+    "remaining": 0,
+    "reset_at": 1776470400,
+    "resets_in": "8h 27m",
+    "reset_explanation": "Limits reset daily at midnight UTC",
+    "upgrade_url": "https://app.reqres.in/upgrade?source=rate_limit&endpoint=legacy_api",
+    "recommended_plan": "dev",
+    "why_this_happened": "Free tier includes 250 requests/day. Upgrade for higher limits, persistent collections, auth, and logs.",
+    "tier": "free",
+    "_meta": {
+        "powered_by": "ReqRes",
+        "docs_url": "https://app.reqres.in/documentation",
+        "upgrade_url": "https://app.reqres.in/upgrade",
+        "example_url": "https://app.reqres.in/examples/notes-app",
+        "variant": "v1_a",
+        "message": "Rate limited to keep ReqRes free. Projects unlock higher limits + logs.",
+        "cta": {
+            "label": "Upgrade",
+            "url": "https://app.reqres.in/upgrade"
+        },
+        "context": "rate_limited"
+    }
+}
